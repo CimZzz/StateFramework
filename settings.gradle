@@ -1,1 +1,1 @@
-include ':app', ':stateframework', ':stateframeworkcompiler'
+include ':app', ':stateframework', ':stateframework-compiler', ':stateframework-anno'

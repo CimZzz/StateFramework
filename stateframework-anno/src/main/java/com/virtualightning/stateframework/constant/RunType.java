@@ -1,11 +1,11 @@
 package com.virtualightning.stateframework.constant;
 
 /**
- * Created by CimZzz on 12/11/16.<br>
- * Project Name : Market-Online<br>
- * Since : Market-Online_0.0.1<br>
+ * Created by CimZzz on 17/2/28.<br>
+ * Project Name : Virtual-Lightning StateFrameWork<br>
+ * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * 观察者运行类型
+ *
  */
 @SuppressWarnings("unused")
 public final class RunType {

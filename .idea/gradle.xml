@@ -10,7 +10,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/stateframework" />
-            <option value="$PROJECT_DIR$/stateframeworkcompiler" />
+            <option value="$PROJECT_DIR$/stateframework-anno" />
+            <option value="$PROJECT_DIR$/stateframework-compiler" />
           </set>
         </option>
         <option name="myModules">
@@ -18,7 +19,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/stateframework" />
-            <option value="$PROJECT_DIR$/stateframeworkcompiler" />
+            <option value="$PROJECT_DIR$/stateframework-anno" />
+            <option value="$PROJECT_DIR$/stateframework-compiler" />
           </set>
         </option>
       </GradleProjectSettings>

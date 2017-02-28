@@ -2,8 +2,6 @@ package com.virtualightning.stateframework.anno;
 
 import com.virtualightning.stateframework.constant.ReferenceType;
 import com.virtualightning.stateframework.constant.RunType;
-import com.virtualightning.stateframework.core.BaseObserver;
-import com.virtualightning.stateframework.core.DefaultObserver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -41,11 +39,4 @@ public @interface BindObserver {
      * {@link ReferenceType} 观察者引用持有类型
      */
     int refType() default ReferenceType.WEAK;
-
-    /**
-     * {@link BaseObserver} 观察者基类型<br>
-     * 缺省为<br>
-     * {@link DefaultObserver} 缺省观察者
-     */
-    Class<? extends BaseObserver> observerCls() default DefaultObserver.class;
 }
