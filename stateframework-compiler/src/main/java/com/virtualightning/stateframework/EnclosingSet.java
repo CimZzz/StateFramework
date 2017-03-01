@@ -1,10 +1,8 @@
 package com.virtualightning.stateframework;
 
-import com.google.common.reflect.Parameter;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
@@ -28,38 +26,49 @@ public class EnclosingSet {
     final String packageName;
     final TypeMirror sourceType;
     final String sourceName;
-    final HashMap<String,AnnotationElem> elemMap;
+    final HashMap<String,StateElem> stateMap;
+    final HashMap<Integer,FieldElem> fieldMap;
 
     public EnclosingSet(String packageName, TypeMirror sourceType, String sourceName) {
         this.packageName = packageName;
         this.sourceType = sourceType;
         this.sourceName = sourceName;
 
-        elemMap = new HashMap<>();
+        stateMap = new HashMap<>();
+        fieldMap = new HashMap<>();
     }
 
 
-    public boolean putElem(AnnotationElem elem) {
+    public boolean putState(StateElem elem) {
         String stateId = elem.stateId;
-        if(elemMap.containsKey(stateId))
+        if(stateMap.containsKey(stateId))
             return false;
 
-        elemMap.put(stateId,elem);
+        stateMap.put(stateId,elem);
+        return true;
+    }
+
+    public boolean putField(FieldElem elem) {
+        int viewId = elem.viewId;
+        if(fieldMap.containsKey(viewId))
+            return false;
+
+        fieldMap.put(viewId,elem);
         return true;
     }
 
     public JavaFile generateJavaFile() {
         ClassName observerBuilder = ClassName.get("com.virtualightning.stateframework.core","ObserverBuilder");
 
-        MethodSpec.Builder methodBuilder =  MethodSpec
-                .methodBuilder("bindAnnotation")
+        MethodSpec.Builder stateMethodBuilder =  MethodSpec
+                .methodBuilder("bindState")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(ClassName.get("com.virtualightning.stateframework.core","StateRecord"),"stateRecord")
                 .addParameter(TypeName.get(sourceType),"source",Modifier.FINAL)
                 .addStatement("$T observerBuilder",observerBuilder);
 
-        for(AnnotationElem elem : elemMap.values()) {
+        for(StateElem elem : stateMap.values()) {
             MethodSpec.Builder subMethodBuilder = MethodSpec.methodBuilder("notify")
                     .addAnnotation(Override.class)
                     .addModifiers(Modifier.PUBLIC)
@@ -96,7 +105,7 @@ public class EnclosingSet {
                     .addSuperinterface(ClassName.get("com.virtualightning.stateframework.core","BaseObserver"))
                     .addMethod(subMethodBuilder.build())
                     .build();
-            methodBuilder
+            stateMethodBuilder
                     .addStatement("observerBuilder = new $T()",observerBuilder)
                     .addStatement("observerBuilder.stateId($S)",elem.stateId)
                     .addStatement("observerBuilder.allowStop($L)",elem.allowStop)
@@ -106,10 +115,22 @@ public class EnclosingSet {
                     .addStatement("stateRecord.registerByBuilder(observerBuilder);");
         }
 
-        TypeSpec.Builder typeSpec = TypeSpec.classBuilder(sourceName + "$$$StateBinder")
+        MethodSpec.Builder viewMethodBuilder = MethodSpec
+                .methodBuilder("bindView")
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(ParameterizedTypeName.get(ClassName.get("com.virtualightning.stateframework.core","StateBinder"),TypeName.get(sourceType)))
-                .addMethod(methodBuilder.build());
+                .addAnnotation(Override.class)
+                .addParameter(TypeName.get(sourceType),"source");
+
+        for(FieldElem elem : fieldMap.values()) {
+            viewMethodBuilder.addStatement("source.$L = ($T)source.findViewById($L)",elem.fieldName,elem.fieldType,elem.viewId);
+        }
+
+
+        TypeSpec.Builder typeSpec = TypeSpec.classBuilder(sourceName + "$$$AnnotationBinder")
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(ParameterizedTypeName.get(ClassName.get("com.virtualightning.stateframework.core","AnnotationBinder"),TypeName.get(sourceType)))
+                .addMethod(stateMethodBuilder.build())
+                .addMethod(viewMethodBuilder.build());
 
         return JavaFile.builder(packageName,typeSpec.build()).build();
     }

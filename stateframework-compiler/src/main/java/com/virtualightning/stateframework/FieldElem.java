@@ -1,7 +1,5 @@
 package com.virtualightning.stateframework;
 
-import java.util.List;
-
 import javax.lang.model.type.TypeMirror;
 
 /**
@@ -11,13 +9,8 @@ import javax.lang.model.type.TypeMirror;
  * Description:<br>
  * Description
  */
-public class AnnotationElem {
-    String methodName;
-    String stateId;
-    boolean allowStop;
-    int runType;
-    int refType;
-
-    boolean isVarParameters;
-    List<TypeMirror> paramTypes;
+public class FieldElem {
+    int viewId;
+    TypeMirror fieldType;
+    String fieldName;
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.virtualightning.stateframework.anno.BindObserver;
+import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.core.StateRecord;
 
 /**
@@ -19,6 +20,9 @@ import com.virtualightning.stateframework.core.StateRecord;
  * Description
  */
 public class MainActivity extends Activity{
+
+    @BindView(android.R.id.accessibilityActionContextClick)
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

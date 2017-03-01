@@ -32,11 +32,6 @@ public final class StateRecord {
 
     /*注册观察者方法*/
 
-    public <T> void registerByAnnotation(T object) {
-        StateBinder<T> stateBinder = FindUtils.findBinderClassByObject(object);
-        stateBinder.bindAnnotation(this,object);
-    }
-
 
     public void registerByBuilder(ObserverBuilder builder) {
         BaseObserver observer = builder.build();

@@ -1,6 +1,6 @@
 package com.virtualightning.stateframework.utils;
 
-import com.virtualightning.stateframework.core.StateBinder;
+import com.virtualightning.stateframework.core.AnnotationBinder;
 
 import java.util.HashMap;
 
@@ -12,31 +12,31 @@ import java.util.HashMap;
  * Description
  */
 public final class FindUtils {
-    private static final HashMap<Class,StateBinder> binderMap;
+    private static final HashMap<Class,AnnotationBinder> binderMap;
 
     static {
         binderMap = new HashMap<>();
     }
 
-    public static <T> StateBinder<T> findBinderClassByObject(T obj) {
+    public static <T> AnnotationBinder<T> findBinderClassByObject(T obj) {
         Class objCls = obj.getClass();
-        StateBinder binder = binderMap.get(objCls);
+        AnnotationBinder binder = binderMap.get(objCls);
 
         if(binder == null) {
             try {
-                Class findCls = Class.forName(objCls.getName() + "$$$StateBinder");
+                Class findCls = Class.forName(objCls.getName() + "$$$AnnotationBinder");
 
-                binder = (StateBinder) findCls.newInstance();
+                binder = (AnnotationBinder) findCls.newInstance();
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException("未能找到合适的 StateBinder , 查找类为 " + objCls.getName(),e);
+                throw new RuntimeException("未能找到合适的 AnnotationBinder , 查找类为 " + objCls.getName(),e);
             } catch (InstantiationException e) {
-                throw new RuntimeException("StateBinder 初始化错误, 查找类为 " + objCls.getName(),e);
+                throw new RuntimeException("AnnotationBinder 初始化错误, 查找类为 " + objCls.getName(),e);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("StateBinder 初始化权限不足, 查找类为 " + objCls.getName(),e);
+                throw new RuntimeException("AnnotationBinder 初始化权限不足, 查找类为 " + objCls.getName(),e);
             }
         }
 
 
-        return (StateBinder<T>) binder;
+        return (AnnotationBinder<T>) binder;
     }
 }

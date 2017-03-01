@@ -7,6 +7,7 @@ package com.virtualightning.stateframework.core;
  * Description:<br>
  * Description
  */
-public interface StateBinder<T> {
-    void bindAnnotation(StateRecord stateRecord,T source);
+public interface AnnotationBinder<T> {
+    void bindState(StateRecord stateRecord, T source);
+    void bindView(T source);
 }
