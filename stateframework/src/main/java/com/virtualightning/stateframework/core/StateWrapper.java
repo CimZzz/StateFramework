@@ -19,7 +19,7 @@ public abstract class StateWrapper {
     final ObserverReference observerReference;
     final InnerState innerState;
 
-    StateWrapper(BaseObserver observer,InnerState innerState) {
+    protected StateWrapper(BaseObserver observer,InnerState innerState) {
         switch (observer.refType) {
             case ReferenceType.WEAK:
                 observerReference = new WeakObserverRef(observer);
@@ -46,6 +46,9 @@ public abstract class StateWrapper {
         notifyAction(args);
     }
 
+    public synchronized final void notifyReally(Object... args) {
+        observerReference.getObserver().notify(args);
+    }
     public abstract void notifyAction(Object... args);
     public boolean notifyCallBack(Object obj) {
         return true;

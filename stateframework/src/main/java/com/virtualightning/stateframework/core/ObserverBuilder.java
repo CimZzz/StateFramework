@@ -16,16 +16,13 @@ public final class ObserverBuilder {
     boolean allowStop;
     int runType;
     int refType;
-    Class<? extends BaseObserver> observerCls;
-    StateRunnable runnable;
+    BaseObserver observer;
 
     public ObserverBuilder() {
         stateId = null;
         allowStop = false;
         runType = RunType.MAIN_LOOP;
         refType = ReferenceType.WEAK;
-        observerCls = DefaultObserver.class;
-        runnable = null;
     }
 
     String getStateId() {
@@ -34,11 +31,6 @@ public final class ObserverBuilder {
 
     public ObserverBuilder runType(int runType) {
         this.runType = runType;
-        return this;
-    }
-
-    public ObserverBuilder runnable(StateRunnable runnable) {
-        this.runnable = runnable;
         return this;
     }
 
@@ -57,26 +49,19 @@ public final class ObserverBuilder {
         return this;
     }
 
-    public ObserverBuilder observerCls(Class<? extends BaseObserver> observerCls) {
-        this.observerCls = observerCls;
+    public ObserverBuilder observer(BaseObserver observer) {
+        this.observer = observer;
         return this;
     }
 
     public BaseObserver build() {
-        if(runnable == null || stateId == null || observerCls == null)
-            throw new RuntimeException("在构建Observer时stateId,runnable,observerCls不能为空");
+        if(stateId == null || observer == null)
+            throw new RuntimeException("在构建Observer时stateId,observer不能为空");
 
-        try {
-            BaseObserver observer = this.observerCls.newInstance();
+        observer.allowStop = allowStop;
+        observer.refType = refType;
+        observer.runType = runType;
 
-            observer.allowStop = allowStop;
-            observer.refType = refType;
-            observer.runType = runType;
-            observer.runnable = runnable;
-        } catch (Exception e) {
-            throw new RuntimeException("初始化观察者失败,观察者的构造函数必须为空.观察者 : " + observerCls.getName(),e);
-        }
-
-        return null;
+        return observer;
     }
 }

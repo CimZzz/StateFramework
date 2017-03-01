@@ -1,6 +1,11 @@
-package com.virtualightning.stateframework.core;
+package com.virtualightning.stateframework.wrappers;
 
 import android.os.Message;
+
+import com.virtualightning.stateframework.core.BaseObserver;
+import com.virtualightning.stateframework.core.InnerState;
+import com.virtualightning.stateframework.core.MainLoopCall;
+import com.virtualightning.stateframework.core.StateWrapper;
 
 /**
  * Created by CimZzz on 17/2/28.<br>
@@ -13,7 +18,7 @@ import android.os.Message;
 public final class MainLoopSeqWrapper extends StateWrapper {
     private int sequenceId;
 
-    MainLoopSeqWrapper(BaseObserver observer, InnerState innerState) {
+    public MainLoopSeqWrapper(BaseObserver observer, InnerState innerState) {
         super(observer, innerState);
 
         sequenceId = -1;

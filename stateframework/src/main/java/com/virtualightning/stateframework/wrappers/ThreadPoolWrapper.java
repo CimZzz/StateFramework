@@ -1,4 +1,8 @@
-package com.virtualightning.stateframework.core;
+package com.virtualightning.stateframework.wrappers;
+
+import com.virtualightning.stateframework.core.BaseObserver;
+import com.virtualightning.stateframework.core.InnerState;
+import com.virtualightning.stateframework.core.StateWrapper;
 
 /**
  * Created by CimZzz on 17/2/28.<br>
@@ -9,12 +13,12 @@ package com.virtualightning.stateframework.core;
  */
 public class ThreadPoolWrapper extends StateWrapper {
 
-    ThreadPoolWrapper(BaseObserver observer, InnerState innerState) {
+    public ThreadPoolWrapper(BaseObserver observer, InnerState innerState) {
         super(observer, innerState);
     }
 
     @Override
     public void notifyAction(Object... args) {
-        observerReference.getObserver().notify(args);
+        notifyReally(args);
     }
 }

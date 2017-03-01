@@ -5,16 +5,13 @@ package com.virtualightning.stateframework.core;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * Description
+ * 观察者基类
  */
 @SuppressWarnings("unused")
 public abstract class BaseObserver {
     int runType;
     int refType;
     boolean allowStop;
-    StateRunnable runnable;
 
-    public final void notify(Object... objects) {
-        runnable.run(objects);
-    }
+    protected abstract void notify(Object... objects);
 }

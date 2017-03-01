@@ -39,4 +39,10 @@ public @interface BindObserver {
      * {@link ReferenceType} 观察者引用持有类型
      */
     int refType() default ReferenceType.WEAK;
+
+    /**
+     * 是否为自变长参数<br>
+     * 如果为是，则方法的参数只能为 Object[];如果为否，参数会自动转型，但是如果参数长度不对或类型不匹配则会抛出异常
+     */
+    boolean isVarParameters() default true;
 }

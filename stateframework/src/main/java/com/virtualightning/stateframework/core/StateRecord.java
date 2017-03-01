@@ -2,6 +2,10 @@ package com.virtualightning.stateframework.core;
 
 import com.virtualightning.stateframework.constant.RunType;
 import com.virtualightning.stateframework.utils.FindUtils;
+import com.virtualightning.stateframework.wrappers.ImmediatelyWrapper;
+import com.virtualightning.stateframework.wrappers.MainLoopSeqWrapper;
+import com.virtualightning.stateframework.wrappers.MainLoopWrapper;
+import com.virtualightning.stateframework.wrappers.ThreadPoolWrapper;
 
 import java.util.HashMap;
 
@@ -28,8 +32,9 @@ public final class StateRecord {
 
     /*注册观察者方法*/
 
-    public void registerByAnnotation(Object object) {
-        FindUtils.findBinderClassByObject(object.getClass()).bindAnnotation(this,object);
+    public <T> void registerByAnnotation(T object) {
+        StateBinder<T> stateBinder = FindUtils.findBinderClassByObject(object);
+        stateBinder.bindAnnotation(this,object);
     }
 
 

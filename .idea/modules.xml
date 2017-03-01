@@ -3,13 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StateFramework.iml" filepath="$PROJECT_DIR$/StateFramework.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StateFrameworkDemo.iml" filepath="$PROJECT_DIR$/StateFrameworkDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/stateframework/stateframework.iml" filepath="$PROJECT_DIR$/stateframework/stateframework.iml" />
       <module fileurl="file://$PROJECT_DIR$/stateframework-anno/stateframework-anno.iml" filepath="$PROJECT_DIR$/stateframework-anno/stateframework-anno.iml" />
       <module fileurl="file://$PROJECT_DIR$/stateframework-compiler/stateframework-compiler.iml" filepath="$PROJECT_DIR$/stateframework-compiler/stateframework-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/stateframework-compiler/stateframeworkcompiler.iml" filepath="$PROJECT_DIR$/stateframework-compiler/stateframeworkcompiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/stateframeworkcompiler/stateframeworkcompiler.iml" filepath="$PROJECT_DIR$/stateframeworkcompiler/stateframeworkcompiler.iml" />
     </modules>
   </component>
 </project>

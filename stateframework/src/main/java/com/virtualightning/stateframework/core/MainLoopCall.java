@@ -9,10 +9,11 @@ import android.os.Message;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
+ * 主线程调用
  */
 @SuppressWarnings("unused")
 public final class MainLoopCall{
-    static final int MSG_STATE_UPDATE = 1001;
+    public static final int MSG_STATE_UPDATE = 1001;
 
     private static MainLoopCall call;
     private Handler handler;
@@ -45,7 +46,7 @@ public final class MainLoopCall{
      * 获得消息
      * @return 消息
      */
-    Message obtainMessage()
+    public Message obtainMessage()
     {
         return handler.obtainMessage();
     }
@@ -69,7 +70,7 @@ public final class MainLoopCall{
                     StateWrapper wrapper = (StateWrapper) objects[0];
                     msg.obj = null;
                     if(wrapper.notifyCallBack(msg.arg1))
-                        wrapper.notify((Object[])objects[1]);
+                        wrapper.notifyReally((Object[])objects[1]);
                     break;
             }
         }

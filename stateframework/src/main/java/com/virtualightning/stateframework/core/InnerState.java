@@ -5,7 +5,7 @@ package com.virtualightning.stateframework.core;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * Description
+ * StateRecord内部状态<br>
  */
 public final class InnerState {
     private boolean isStop;
@@ -20,5 +20,12 @@ public final class InnerState {
 
     void setStop(boolean stop) {
         isStop = stop;
+
+        new StateRunnable(){
+            @Override
+            public void run(Object... args) {
+
+            }
+        };
     }
 }

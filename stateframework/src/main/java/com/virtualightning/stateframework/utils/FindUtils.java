@@ -18,7 +18,8 @@ public final class FindUtils {
         binderMap = new HashMap<>();
     }
 
-    public static StateBinder findBinderClassByObject(Class objCls) {
+    public static <T> StateBinder<T> findBinderClassByObject(T obj) {
+        Class objCls = obj.getClass();
         StateBinder binder = binderMap.get(objCls);
 
         if(binder == null) {
@@ -36,6 +37,6 @@ public final class FindUtils {
         }
 
 
-        return binder;
+        return (StateBinder<T>) binder;
     }
 }
