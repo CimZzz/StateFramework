@@ -5,11 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.virtualightning.stateframework.anno.BindObserver;
 import com.virtualightning.stateframework.anno.BindView;
+import com.virtualightning.stateframework.core.Analyzer;
 import com.virtualightning.stateframework.core.StateRecord;
 
 /**
@@ -19,33 +20,34 @@ import com.virtualightning.stateframework.core.StateRecord;
  * Description:<br>
  * Description
  */
-public class MainActivity extends Activity{
+public class MainActivity extends Activity {
 
-    @BindView(android.R.id.accessibilityActionContextClick)
-    View view;
+
+    @BindView(R.id.m)
+    LinearLayout view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = new View(this);
         final StateRecord stateRecord = new StateRecord();
+        setContentView(R.layout.main);
+
+        Analyzer.analyzeState(stateRecord,this);
+        Analyzer.analyzeView(this);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stateRecord.notifyState("3",1,0.2);
+                stateRecord.notifyState("3", 1, 0.2);
             }
         });
         view.setBackgroundColor(Color.BLUE);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        setContentView(view);
-        stateRecord.registerByAnnotation(this);
     }
 
     @BindObserver(
             stateId = "3",
             isVarParameters = false
     )
-    public void fun(Integer i,Double d) {
-        Toast.makeText(this,String.valueOf(i + d),Toast.LENGTH_SHORT).show();
+    public void fun(Integer i, Double d) {
+        Toast.makeText(this, String.valueOf(i + d), Toast.LENGTH_SHORT).show();
     }
 }

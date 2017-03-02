@@ -24,3 +24,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+subprojects { project ->
+    group = GROUP
+    version = '0.1.1'
+}
