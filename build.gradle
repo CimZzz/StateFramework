@@ -27,5 +27,5 @@ task clean(type: Delete) {
 
 subprojects { project ->
     group = GROUP
-    version = '0.1.1'
+    version = VERSION
 }
