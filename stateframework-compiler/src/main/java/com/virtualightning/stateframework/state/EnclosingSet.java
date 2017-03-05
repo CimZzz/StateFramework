@@ -7,6 +7,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,23 +60,32 @@ public class EnclosingSet {
 
     public JavaFile generateJavaFile() {
         ClassName observerBuilder = ClassName.get("com.virtualightning.stateframework.state","ObserverBuilder");
+        TypeName typeName = TypeName.get(sourceType);
+
 
         MethodSpec.Builder stateMethodBuilder =  MethodSpec
                 .methodBuilder("bindState")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(ClassName.get("com.virtualightning.stateframework.state","StateRecord"),"stateRecord")
-                .addParameter(TypeName.get(sourceType),"source",Modifier.FINAL)
-                .addStatement("$T observerBuilder",observerBuilder);
+                .addParameter(typeName,"source")
+                .addStatement("$T observerBuilder",observerBuilder)
+                .addStatement("final $T<$T> sourceRef = new $T<>(source)",WeakReference.class,typeName,WeakReference.class);
 
         for(StateElem elem : stateMap.values()) {
             MethodSpec.Builder subMethodBuilder = MethodSpec.methodBuilder("notify")
                     .addAnnotation(Override.class)
                     .addModifiers(Modifier.PUBLIC)
-                    .addParameter(Object[].class,"args");
+                    .addParameter(Object[].class,"args")
+                    .addStatement("$T sourceData = sourceRef.get()",typeName)
+                    .beginControlFlow("if (sourceData == null)")
+                    .addStatement("return")
+                    .endControlFlow();
+
+
 
             if(elem.isVarParameters) {
-                subMethodBuilder.addStatement("source.$L(args)",elem.methodName);
+                subMethodBuilder.addStatement("sourceData.$L(args)",elem.methodName);
             } else {
                 int size = elem.paramTypes.size();
 
@@ -84,7 +94,7 @@ public class EnclosingSet {
                 subMethodBuilder.endControlFlow();
 
                 if(size == 0)
-                    subMethodBuilder.addStatement("source.$L()",elem.methodName);
+                    subMethodBuilder.addStatement("sourceData.$L()",elem.methodName);
                 else {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("($T)args[0]");
@@ -96,7 +106,7 @@ public class EnclosingSet {
                     List<Object> objectList = new ArrayList<>();
                     objectList.add(elem.methodName);
                     objectList.addAll(elem.paramTypes);
-                    subMethodBuilder.addStatement("source.$L(" +stringBuilder.toString()+")",objectList.toArray());
+                    subMethodBuilder.addStatement("sourceData.$L(" +stringBuilder.toString()+")",objectList.toArray());
                 }
 
             }
