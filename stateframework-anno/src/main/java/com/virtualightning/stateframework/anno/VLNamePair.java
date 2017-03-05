@@ -16,5 +16,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @SuppressWarnings("unused")
 public @interface VLNamePair {
+    /**
+     * @return NamePair键值
+     */
     String value();
 }

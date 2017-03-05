@@ -18,17 +18,17 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 public @interface VLMultiFile {
     /**
-     * MultiFile键值
+     * @return MultiFile键值
      */
     String name();
 
     /**
-     * MultiFile文件名
+     * @return MultiFile文件名
      */
     String fileName();
 
     /**
-     * MultiFile文件类型
+     * @return MultiFile文件类型
      */
     String contentType();
 }

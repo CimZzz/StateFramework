@@ -19,19 +19,18 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 public @interface BindHTTPRequest {
     /**
-     * URL路径<br>
+     * @return URL路径<br>
      * 可以配合 {@link VLUrlParams}组合路径
      */
     String url();
 
     /**
-     * HTTP 请求方法<br>
-     * 参考{@link HTTPMethodType} 请求方法类型
+     * @return {@link HTTPMethodType} HTTP 请求方法<br>
      */
     String method() default HTTPMethodType.POST;
 
     /**
-     * HTTP 请求编码
+     * @return HTTP 请求编码
      */
     String charset() default "UTF-8";
 }

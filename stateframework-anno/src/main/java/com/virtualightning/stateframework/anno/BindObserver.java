@@ -21,28 +21,29 @@ import java.lang.annotation.Target;
 public @interface BindObserver {
 
     /**
-     * 观察者监视状态ID
+     * @return 观察者监视状态ID
      */
     String stateId();
 
     /**
-     * 观察者是否允许被停止
+     * @return 观察者是否允许被停止
      */
     boolean allowStop() default false;
 
     /**
-     * {@link RunType} 观察者运行类型
+     * @return {@link RunType} 观察者运行类型
      */
     int runType() default RunType.MAIN_LOOP;
 
     /**
-     * {@link ReferenceType} 观察者引用持有类型
+     * @return {@link ReferenceType} 观察者引用持有类型
      */
-    int refType() default ReferenceType.WEAK;
+    int refType() default ReferenceType.STRONG;
 
     /**
      * 是否为自变长参数<br>
      * 如果为是，则方法的参数只能为 Object[];如果为否，参数会自动转型，但是如果参数长度不对或类型不匹配则会抛出异常
+     * @return 是否为自变长参数
      */
     boolean isVarParameters() default true;
 }

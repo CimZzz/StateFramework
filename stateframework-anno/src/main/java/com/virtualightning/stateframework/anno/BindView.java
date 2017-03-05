@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface BindView {
     /**
-     * 视图ID
+     * @return 视图ID
      */
     int value();
 }

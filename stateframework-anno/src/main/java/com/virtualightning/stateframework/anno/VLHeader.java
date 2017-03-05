@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 public @interface VLHeader {
     /**
-     * 请求头部Key
+     * @return 请求头部Key
      */
     String value();
 }
