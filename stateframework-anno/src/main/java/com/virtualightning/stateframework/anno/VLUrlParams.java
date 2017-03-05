@@ -10,13 +10,16 @@ import java.lang.annotation.Target;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * 绑定视图
+ * URL路径参数,只适用于注解的方式生成RequestBody,示例如下:<br>
+ * http://localhost/?ss={$}&amp;s2={$}<br>
+ * 可以通过此注解填充URL形成完整的路径,只能修饰String类型的属性
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
-public @interface BindView {
+@SuppressWarnings("unused")
+public @interface VLUrlParams {
     /**
-     * 视图ID
+     * URL路径参数下标
      */
     int value();
 }

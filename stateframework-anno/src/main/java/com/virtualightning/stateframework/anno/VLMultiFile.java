@@ -6,17 +6,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by CimZzz on 17/3/1.<br>
+ * Created by CimZzz on 3/4/17.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * 绑定视图
+ * POST文件上传<br>
+ * 只能修饰File类型的属性
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
-public @interface BindView {
+@SuppressWarnings("unused")
+public @interface VLMultiFile {
     /**
-     * 视图ID
+     * MultiFile键值
      */
-    int value();
+    String name();
+
+    /**
+     * MultiFile文件名
+     */
+    String fileName();
+
+    /**
+     * MultiFile文件类型
+     */
+    String contentType();
 }

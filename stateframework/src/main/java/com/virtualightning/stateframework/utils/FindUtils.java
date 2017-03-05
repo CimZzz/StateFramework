@@ -1,6 +1,7 @@
 package com.virtualightning.stateframework.utils;
 
-import com.virtualightning.stateframework.core.AnnotationBinder;
+import com.virtualightning.stateframework.http.RequestTransform;
+import com.virtualightning.stateframework.state.AnnotationBinder;
 
 import java.util.HashMap;
 
@@ -13,9 +14,11 @@ import java.util.HashMap;
  */
 public final class FindUtils {
     private static final HashMap<Class,AnnotationBinder> binderMap;
+    private static final HashMap<Class,RequestTransform> transferMap;
 
     static {
         binderMap = new HashMap<>();
+        transferMap = new HashMap<>();
     }
 
     public static <T> AnnotationBinder<T> findBinderClassByObject(T obj) {
@@ -38,5 +41,27 @@ public final class FindUtils {
 
 
         return (AnnotationBinder<T>) binder;
+    }
+
+    public static <T> RequestTransform<T> findTransferClassByObject(T obj) {
+        Class objCls = obj.getClass();
+        RequestTransform transform = transferMap.get(objCls);
+
+        if(transform == null) {
+            try {
+                Class findCls = Class.forName(objCls.getName() + "$$$RequestTransform");
+
+                transform = (RequestTransform) findCls.newInstance();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("未能找到合适的 RequestTransform , 查找类为 " + objCls.getName(),e);
+            } catch (InstantiationException e) {
+                throw new RuntimeException("RequestTransform 初始化错误, 查找类为 " + objCls.getName(),e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("RequestTransform 初始化权限不足, 查找类为 " + objCls.getName(),e);
+            }
+        }
+
+
+        return (RequestTransform<T>) transform;
     }
 }
