@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
 @SuppressWarnings("unused")
 public @interface VLUrlParams {
     /**
-     * URL路径参数下标
+     * @return URL路径参数下标
      */
     int value();
 }
