@@ -1,6 +1,7 @@
 package com.virtualightning.stateframework.anno;
 
-import com.virtualightning.stateframework.constant.HTTPMethodType;
+import com.virtualightning.stateframework.constant.Charset;
+import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -25,12 +26,12 @@ public @interface BindHTTPRequest {
     String url();
 
     /**
-     * @return {@link HTTPMethodType} HTTP 请求方法<br>
+     * @return {@link RequestMethod} HTTP 请求方法<br>
      */
-    String method() default HTTPMethodType.POST;
+    RequestMethod method() default RequestMethod.GET;
 
     /**
      * @return HTTP 请求编码
      */
-    String charset() default "UTF-8";
+    Charset charset() default Charset.UTF_8;
 }

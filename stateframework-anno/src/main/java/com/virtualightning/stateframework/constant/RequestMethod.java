@@ -1,21 +1,38 @@
 package com.virtualightning.stateframework.constant;
 
 /**
- * Created by CimZzz on ${Date}.<br>
+ * Created by CimZzz on 17/3/6.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
  * Description
  */
 @SuppressWarnings("unused")
-public final class HTTPMethodType {
+public enum RequestMethod {
+    /**
+     * 缺省
+     */
+    DEFAULT(""),
+
     /**
      * POST方法
      */
-    public static final String POST = "POST";
+    POST("POST"),
+
+
 
     /**
      * GET方法
      */
-    public static final String GET = "GET";
+    GET("GET");
+
+
+    /**
+     * 请求方法值
+     */
+    public final String Value;
+
+    RequestMethod(String str) {
+        this.Value = str;
+    }
 }

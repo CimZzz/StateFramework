@@ -1,7 +1,5 @@
 package com.virtualightning.stateframework.http;
 
-import android.util.Log;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,9 +32,9 @@ public final class MultiFile extends Request.FormData {
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
 
         String buffer = "Content-Disposition: form-data; name=\"" +
-                URLEncoder.encode(key,requestBody.charset) +
+                URLEncoder.encode(key,requestBody.charset.Value) +
                 "\"; filename=\"" +
-                URLEncoder.encode(fileName,requestBody.charset) +
+                URLEncoder.encode(fileName,requestBody.charset.Value) +
                 "\"\n" +
                 "Content-Type: " +
                 contentType +

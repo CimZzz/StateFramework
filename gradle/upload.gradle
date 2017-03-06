@@ -43,7 +43,8 @@ if(project.getPlugins().hasPlugin('com.android.application') ||
 
     task androidJavadocs(type: Javadoc) {
         source = android.sourceSets.main.java.source
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator));
+        classpath += project.rootProject.project("stateframework-anno").files("src/main/java/")
     }
 
     task javadocJar(type: Jar, dependsOn: androidJavadocs) {

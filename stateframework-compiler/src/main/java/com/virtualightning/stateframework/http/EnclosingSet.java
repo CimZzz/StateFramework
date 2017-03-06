@@ -6,18 +6,15 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.virtualightning.stateframework.constant.HTTPMethodType;
-import com.virtualightning.stateframework.state.StateElem;
+import com.virtualightning.stateframework.constant.Charset;
+import com.virtualightning.stateframework.constant.RequestMethod;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
@@ -35,8 +32,8 @@ public class EnclosingSet {
     String sourceName;
 
     String url;
-    String method;
-    String charset;
+    RequestMethod method;
+    Charset charset;
     List<NamePair> namePairs;
     List<MultipartFile> multipartFiles;
     Map<Integer,UrlParams> urlParams;
@@ -109,11 +106,11 @@ public class EnclosingSet {
                 .addStatement("$T requestBuilder = new $T()",requestBuilder,requestBuilder);
 
         /*处理请求头部参数*/
-        transferMethodBuilder.addStatement("requestBuilder.method($S)",method);
-        transferMethodBuilder.addStatement("requestBuilder.charset($S)",charset);
+        transferMethodBuilder.addStatement("requestBuilder.method($T.$L)",method.getClass(),method);
+        transferMethodBuilder.addStatement("requestBuilder.charset($T.$L)",charset.getClass(),charset);
 
         /*处理URL*/
-        if(method.equals(HTTPMethodType.GET)) {
+        if(method.equals(RequestMethod.GET)) {
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.append("\"");
             int length = url.length();

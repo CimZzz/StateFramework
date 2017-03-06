@@ -7,7 +7,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 /**
  * Created by CimZzz on 17/2/28.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>

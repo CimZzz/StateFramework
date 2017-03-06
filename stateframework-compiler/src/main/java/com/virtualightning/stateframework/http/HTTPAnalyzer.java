@@ -2,13 +2,11 @@ package com.virtualightning.stateframework.http;
 
 import com.virtualightning.stateframework.Analyzer;
 import com.virtualightning.stateframework.anno.BindHTTPRequest;
-import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.VLHeader;
 import com.virtualightning.stateframework.anno.VLMultiFile;
 import com.virtualightning.stateframework.anno.VLNamePair;
 import com.virtualightning.stateframework.anno.VLUrlParams;
-import com.virtualightning.stateframework.constant.HTTPMethodType;
-import com.virtualightning.stateframework.state.*;
+import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,7 +93,7 @@ public class HTTPAnalyzer extends Analyzer {
             /*绑定的属性类型必须为 String,且 HTTP 请求的方法必须为 GET*/
             if(!variableElement.asType().toString().equals("java.lang.String"))
                 error("绑定URL填充参数的属性类型必须为 String ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
-            if(!enclosingSet.method.equals(HTTPMethodType.GET))
+            if(!enclosingSet.method.equals(RequestMethod.GET))
                 error("绑定URL填充参数属性所在类绑定HTTP请求的请求方式必须为GET ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
 
             VLUrlParams vlUrlParams = element.getAnnotation(VLUrlParams.class);

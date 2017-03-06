@@ -1,13 +1,13 @@
 package com.virtualightning.stateframework.http;
 
-import com.virtualightning.stateframework.constant.HTTPMethodType;
+import com.virtualightning.stateframework.constant.Charset;
+import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -28,8 +28,8 @@ public final class Request {
             ,'1','2','3','4','5','6','7','8','9'};
 
     String url;
-    String method;
-    String charset;
+    RequestMethod method;
+    Charset charset;
     boolean isMultipart;
     HashMap<String,String> requestHeader;
     HashMap<String,FormData> formData;
@@ -40,13 +40,13 @@ public final class Request {
     }
 
     HttpURLConnection commitRequest() throws Exception {
-        HttpURLConnection connection = null;
+        HttpURLConnection connection;
         try {
             /*开启URL连接*/
             connection = (HttpURLConnection) new URL(url).openConnection();
 
             /*设置HTTP连接前的一些请求参数*/
-            connection.setRequestMethod(method);
+            connection.setRequestMethod(method.Value);
             /*设置头参数*/
             if(requestHeader.size() != 0) {
                 for(Map.Entry<String,String> entry : requestHeader.entrySet())
@@ -54,7 +54,7 @@ public final class Request {
             }
 
             /*开始连接*/
-            if(method.equals(HTTPMethodType.POST)) {
+            if(method.equals(RequestMethod.POST)) {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
 
@@ -92,7 +92,7 @@ public final class Request {
                     for (FormData formData : this.formData.values()) {
                         if (isFirst)
                             isFirst = false;
-                        else dataOutputStream.write("&".getBytes(charset));
+                        else dataOutputStream.write("&".getBytes(charset.Value));
                         formData.writeToStream(dataOutputStream);
                         dataOutputStream.flush();
                     }
@@ -125,12 +125,12 @@ public final class Request {
             return this;
         }
 
-        public Builder method(String method) {
-            requestBody.method = method.toUpperCase();
+        public Builder method(RequestMethod method) {
+            requestBody.method = method;
             return this;
         }
 
-        public Builder charset(String charset) {
+        public Builder charset(Charset charset) {
             requestBody.charset = charset;
             return this;
         }

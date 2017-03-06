@@ -1,14 +1,10 @@
 package com.virtualightning.stateframework.http;
 
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by CimZzz on 3/4/17.<br>
@@ -34,10 +30,7 @@ public class Response {
     }
 
     public String getResponseHeader(String key) throws IOException {
-        for(Map.Entry<String,List<String>> entry : connection.getHeaderFields().entrySet()) {
-            Log.e("DESS","key : " + entry.getKey() + ", value : " + Arrays.toString(entry.getValue().toArray()));
-        }
-        return "";//connection.getHeaderField(key);
+        return connection.getHeaderField(key);
     }
 
     public InputStream getResponseBodyStream() throws IOException{
