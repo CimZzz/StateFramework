@@ -27,9 +27,15 @@ public class UniqueHashMap<K,V> {
         return true;
     }
 
+    public boolean conflict(K k) {
+        return subMap.containsKey(k);
+    }
+
     public Collection<V> values() {
         return subMap.values();
     }
+
+    public V get(K k) {return subMap.get(k);}
 
     public Set<Map.Entry<K,V>> entrySet() {
         return subMap.entrySet();

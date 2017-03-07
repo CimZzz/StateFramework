@@ -23,10 +23,10 @@ public abstract class Analyzer {
     protected final List<AnalyzingElem> analyzingElemList;
     protected final EnclosingSet enclosingSet;
 
-    public Analyzer() {
+    public Analyzer(EnclosingSet enclosingSet) {
         pipeLineHandler = new PipeLineHandler();
         analyzingElemList = new ArrayList<>();
-        enclosingSet = new EnclosingSet();
+        this.enclosingSet = enclosingSet;
     }
 
     public final void init(Messager messager, Filer filer, Elements elements) {
@@ -34,6 +34,7 @@ public abstract class Analyzer {
         this.elements = elements;
         for(AnalyzingElem elem : analyzingElemList)
             elem.init(messager, elements);
+        enclosingSet.init(elements);
     }
 
     public abstract void analyze(RoundEnvironment roundEnv);

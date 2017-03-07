@@ -63,7 +63,18 @@ public class PipeLineHandler {
                 return;
     }
 
-    interface PipeLine {
+    public void doSubProcess(int subLineIndex) {
+        List<PipeLine> lineList = subLineMap.get(subLineIndex);
+
+        if(lineList == null)
+            return;
+
+        for(PipeLine pipeLine : lineList)
+            if(!pipeLine.process())
+                return;
+    }
+
+    public interface PipeLine {
         boolean process();
     }
 }

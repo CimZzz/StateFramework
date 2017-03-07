@@ -23,14 +23,14 @@ public final class NamePair extends Request.FormData {
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
         if(requestBody.isMultipart) {
             dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"");
-            dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset));
+            dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset.Value));
             dataOutputStream.writeBytes("\"\n\r\n");
-            dataOutputStream.writeBytes(URLEncoder.encode(value,requestBody.charset));
+            dataOutputStream.writeBytes(URLEncoder.encode(value,requestBody.charset.Value));
             dataOutputStream.writeBytes("\r\n");
         } else {
-            dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset));
+            dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset.Value));
             dataOutputStream.writeBytes("=");
-            dataOutputStream.writeBytes(URLEncoder.encode(value,requestBody.charset));
+            dataOutputStream.writeBytes(URLEncoder.encode(value,requestBody.charset.Value));
         }
     }
 }

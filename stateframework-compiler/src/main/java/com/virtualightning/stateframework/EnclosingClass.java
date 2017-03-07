@@ -4,6 +4,10 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 
@@ -21,7 +25,9 @@ public class EnclosingClass {
 
     String suffixConnector;//后缀连接符
     String suffix;//后缀
-    TypeName[] superInterfaces;//继承接口
+
+    final HashMap<String,Object> resourceMap;//共享表
+    final HashMap<Object,Set<Object>> conflictMap;//冲突表
 
     private TypeSpec.Builder typeSpecBuilder;
 
@@ -29,18 +35,43 @@ public class EnclosingClass {
         this.packageName = packageName;
         this.classType = TypeName.get(classType);
         this.className = className;
+        this.conflictMap = new HashMap<>();
+        this.resourceMap = new HashMap<>();
     }
 
-    public void prepare() {
-        typeSpecBuilder = TypeSpec.classBuilder(className + suffixConnector + suffix)
-                .addModifiers(Modifier.PUBLIC);
+    public void putResource(String key,Object res) {
+        resourceMap.put(key, res);
+    }
 
-        for(TypeName superInterface : superInterfaces)
-            typeSpecBuilder.addSuperinterface(superInterface);
+    public Object getResource(String key) {
+        return resourceMap.get(key);
+    }
+
+    public boolean putConflict(Object type,Object key) {
+        Set<Object> conflictSet = conflictMap.get(type);
+
+        if(conflictSet == null) {
+            conflictSet = new HashSet<>();
+            conflictMap.put(type,conflictSet);
+        }
+
+        if(conflictSet.contains(key))
+            return false;
+
+        conflictSet.add(key);
+        return true;
+    }
+
+    public TypeSpec.Builder prepare() {
+        if(typeSpecBuilder == null) {
+            typeSpecBuilder = TypeSpec.classBuilder(className + suffixConnector + suffix)
+                    .addModifiers(Modifier.PUBLIC);
+        }
+
+        return typeSpecBuilder;
     }
 
     public JavaFile generateJavaFile() {
-
         return JavaFile.builder(packageName,typeSpecBuilder.build()).build();
     }
 }

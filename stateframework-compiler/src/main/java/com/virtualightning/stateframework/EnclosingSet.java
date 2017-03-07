@@ -1,5 +1,7 @@
 package com.virtualightning.stateframework;
 
+import com.squareup.javapoet.TypeName;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -17,7 +19,13 @@ public class EnclosingSet {
     private final HashMap<String,EnclosingClass> enclosingClassMap;
     Elements elements;
 
-    public EnclosingSet() {
+    final String suffixConnector;//后缀连接符
+    final String suffix;//后缀
+
+    public EnclosingSet(String suffixConnector, String suffix) {
+        this.suffixConnector = suffixConnector;
+        this.suffix = suffix;
+
         this.enclosingClassMap = new HashMap<>();
     }
 
@@ -28,24 +36,36 @@ public class EnclosingSet {
     public String createEnclosingClass(TypeElement typeElement) {
         String className = typeElement.getSimpleName().toString();
 
-        if(!enclosingClassMap.containsKey(className))
-            enclosingClassMap.put(className,new EnclosingClass(
-                    elements.getPackageOf(typeElement).getSimpleName().toString(),
+        if(!enclosingClassMap.containsKey(className)) {
+            EnclosingClass enclosingClass = new EnclosingClass(
+                    elements.getPackageOf(typeElement).getQualifiedName().toString(),
                     typeElement.asType(),
-                    className));
+                    className);
+            enclosingClassMap.put(className,enclosingClass);
+
+            enclosingClass.suffix = suffix;
+            enclosingClass.suffixConnector = suffixConnector;
+            enclosingClassMap.put(className,enclosingClass);
+        }
 
         return className;
     }
 
     public EnclosingClass getEnclosingClass(TypeElement typeElement) {
+        return getEnclosingClass(typeElement,true);
+    }
+
+    public EnclosingClass getEnclosingClass(TypeElement typeElement,boolean autoCreate) {
         String className = typeElement.getSimpleName().toString();
         EnclosingClass enclosingClass = enclosingClassMap.get(className);
 
-        if(enclosingClass == null){
+        if(enclosingClass == null && autoCreate){
             enclosingClass = new EnclosingClass(
-                    elements.getPackageOf(typeElement).getSimpleName().toString(),
+                    elements.getPackageOf(typeElement).getQualifiedName().toString(),
                     typeElement.asType(),
                     className);
+            enclosingClass.suffix = suffix;
+            enclosingClass.suffixConnector = suffixConnector;
             enclosingClassMap.put(className,enclosingClass);
         }
 

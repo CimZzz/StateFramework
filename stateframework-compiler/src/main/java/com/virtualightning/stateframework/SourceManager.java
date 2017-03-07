@@ -10,14 +10,14 @@ import java.util.HashMap;
  * Description
  */
 public class SourceManager<T> {
-    private final HashMap<String,UniqueHashMap<Integer,T>> sourceMap;
+    private final HashMap<String,UniqueHashMap<Object,T>> sourceMap;
 
     public SourceManager() {
         this.sourceMap = new HashMap<>();
     }
 
-    public boolean putSource(String className,Integer key,T t) {
-        UniqueHashMap<Integer,T> uniqueHashMap = sourceMap.get(className);
+    public boolean putSource(String className,Object key,T t) {
+        UniqueHashMap<Object,T> uniqueHashMap = sourceMap.get(className);
         if(uniqueHashMap == null)
             this.sourceMap.put(className,uniqueHashMap = new UniqueHashMap<>());
 
@@ -25,7 +25,7 @@ public class SourceManager<T> {
         return uniqueHashMap.put(key, t);
     }
 
-    public UniqueHashMap<Integer,T> getUniqueHashMap(String className) {
+    public UniqueHashMap<Object,T> getUniqueHashMap(String className) {
         return sourceMap.get(className);
     }
 }

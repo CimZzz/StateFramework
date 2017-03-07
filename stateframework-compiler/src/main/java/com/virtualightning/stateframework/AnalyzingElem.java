@@ -32,9 +32,9 @@ public abstract class AnalyzingElem<T> {
         this.elements = elements;
     }
 
-    protected abstract Class<? extends Annotation> getSupportAnnotation();
-    protected abstract boolean handleElement(Element element,EnclosingSet enclosingSet);
-    protected abstract MethodSpec generateMethod(EnclosingClass enclosingClass);
+    public abstract Class<? extends Annotation> getSupportAnnotation();
+    public abstract boolean handleElement(Element element,EnclosingSet enclosingSet);
+    public abstract MethodSpec.Builder generateMethod(MethodSpec.Builder builder,EnclosingClass enclosingClass);
 
     public Elements getElements() {
         return elements;

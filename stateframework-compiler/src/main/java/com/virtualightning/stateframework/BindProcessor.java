@@ -12,6 +12,7 @@ import com.virtualightning.stateframework.http.HTTPAnalyzer;
 import com.virtualightning.stateframework.state.StateAnalyzer;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,29 +26,31 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
-@SuppressWarnings("unused")
 public class BindProcessor extends AbstractProcessor {
     private final List<Analyzer> analyzerList;
+    private int runCount;
 
     public BindProcessor() {
+        runCount = 0;
         analyzerList = new ArrayList<>();
         analyzerList.add(new StateAnalyzer());
         analyzerList.add(new HTTPAnalyzer());
     }
 
+    private Messager messager;
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
-        Messager messager = processingEnv.getMessager();
+        messager = processingEnv.getMessager();
         Filer filer = processingEnv.getFiler();
         Elements elements = processingEnv.getElementUtils();
 
         for(Analyzer analyzer : analyzerList)
             analyzer.init(messager,filer,elements);
-
     }
 
     @Override
@@ -57,23 +60,17 @@ public class BindProcessor extends AbstractProcessor {
         for (Analyzer analyzer : analyzerList)
             analyzer.getSupportedAnnotationTypes(set);
 
-        set.add(BindObserver.class.getName());
-        set.add(BindView.class.getName());
-        set.add(BindHTTPRequest.class.getName());
-        set.add(VLMultiFile.class.getName());
-        set.add(VLNamePair.class.getName());
-        set.add(VLUrlParams.class.getName());
-        set.add(OnClick.class.getName());
-
         return set;
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
+        if(runCount ++ > 0)
+            return false;
+
         for (Analyzer analyzer : analyzerList)
             analyzer.analyze(roundEnv);
-
 
         return true;
     }

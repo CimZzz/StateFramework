@@ -20,7 +20,7 @@ import javax.lang.model.type.TypeMirror;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * Description
+ * 绑定视图解析器
  */
 public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewElem> {
 
@@ -31,12 +31,12 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
     }
 
     @Override
-    protected Class<? extends Annotation> getSupportAnnotation() {
+    public Class<? extends Annotation> getSupportAnnotation() {
         return BindView.class;
     }
 
     @Override
-    protected boolean handleElement(Element element, com.virtualightning.stateframework.EnclosingSet enclosingSet) {
+    public boolean handleElement(Element element, com.virtualightning.stateframework.EnclosingSet enclosingSet) {
         TypeElement typeElement = (TypeElement) element.getEnclosingElement();
 
         if(!modifyValidHelper.valid(element.getModifiers())) {
@@ -53,20 +53,17 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
         bindViewElem.fieldType = element.asType();
         bindViewElem.fieldName = element.getSimpleName().toString();
 
-        if(sourceManager.putSource(className,bindViewElem.viewId,bindViewElem))
+        if(!sourceManager.putSource(className,bindViewElem.viewId,bindViewElem)) {
             error("视图ID不能相同,视图ID : " + bindViewElem.viewId + " ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
+            return false;
+        }
 
         return true;
     }
 
     @Override
-    protected MethodSpec generateMethod(EnclosingClass enclosingClass) {
-        UniqueHashMap<Integer,BindViewElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
-
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return null;
-
-        Collection<BindViewElem> bindViewElems = uniqueHashMap.values();
+    public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
+        UniqueHashMap<Object,BindViewElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
         ClassName viewCls = ClassName.get("android.view","View");
 
         MethodSpec.Builder viewMethodBuilder = MethodSpec
@@ -75,6 +72,12 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
                 .addAnnotation(Override.class)
                 .addParameter(enclosingClass.classType,"source")
                 .addParameter(viewCls,"view");
+
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return viewMethodBuilder;
+
+
+        Collection<BindViewElem> bindViewElems = uniqueHashMap.values();
 
         viewMethodBuilder.beginControlFlow("if(view == null)");
 
@@ -89,7 +92,9 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
             viewMethodBuilder.addStatement("source.$L = ($T)view.findViewById($L)",bindViewElem.fieldName,bindViewElem.fieldType,bindViewElem.viewId);
         }
 
-        return viewMethodBuilder.build();
+        viewMethodBuilder.endControlFlow();
+
+        return viewMethodBuilder;
     }
 
     static class BindViewElem {
