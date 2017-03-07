@@ -1,10 +1,13 @@
 package com.virtualightning.stateframework;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.util.Elements;
-import javax.tools.Diagnostic;
 
 /**
  * Created by CimZzz on 3/4/17.<br>
@@ -14,26 +17,38 @@ import javax.tools.Diagnostic;
  * Description
  */
 public abstract class Analyzer {
-    protected final Messager mMessager; //日志相关的辅助类
-    protected final Filer filer;
-    protected final Elements elements;
+    Filer filer; //文件相关的辅助类
+    Elements elements; //用来获取包名等属性辅助
+    protected final PipeLineHandler pipeLineHandler;
+    protected final List<AnalyzingElem> analyzingElemList;
+    protected final EnclosingSet enclosingSet;
 
-    public Analyzer(Messager mMessager, Filer filer, Elements elements) {
-        this.mMessager = mMessager;
+    public Analyzer() {
+        pipeLineHandler = new PipeLineHandler();
+        analyzingElemList = new ArrayList<>();
+        enclosingSet = new EnclosingSet();
+    }
+
+    public final void init(Messager messager, Filer filer, Elements elements) {
         this.filer = filer;
         this.elements = elements;
+        for(AnalyzingElem elem : analyzingElemList)
+            elem.init(messager, elements);
     }
 
     public abstract void analyze(RoundEnvironment roundEnv);
 
-
-
-    public void log(Object object) {
-        mMessager.printMessage(Diagnostic.Kind.NOTE,object != null ? object.toString() : "null");
+    public void getSupportedAnnotationTypes(Set<String> annotations) {
+        for(AnalyzingElem elem : analyzingElemList)
+            annotations.add(elem.getSupportAnnotation().getName());
     }
 
-    public void error(Object object) {
-        mMessager.printMessage(Diagnostic.Kind.ERROR,object != null ? object.toString() : "null");
+
+    public Filer getFiler() {
+        return filer;
     }
 
+    public Elements getElements() {
+        return elements;
+    }
 }

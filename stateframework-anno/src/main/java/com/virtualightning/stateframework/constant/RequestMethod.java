@@ -9,10 +9,6 @@ package com.virtualightning.stateframework.constant;
  */
 @SuppressWarnings("unused")
 public enum RequestMethod {
-    /**
-     * 缺省
-     */
-    DEFAULT(""),
 
     /**
      * POST方法

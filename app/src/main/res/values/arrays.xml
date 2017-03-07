@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="strArray">
+        <item>测试:绑定视图与事件测试</item>
+    </string-array>
+</resources>

@@ -6,6 +6,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.virtualightning.stateframework.UniqueHashMap;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -22,21 +23,23 @@ import javax.lang.model.type.TypeMirror;
  * Description:<br>
  * Description
  */
-public class EnclosingSet {
+public class EnclosingSet2 {
 
     final String packageName;
     final TypeMirror sourceType;
     final String sourceName;
     final HashMap<String,StateElem> stateMap;
     final HashMap<Integer,FieldElem> fieldMap;
+    final UniqueHashMap<Integer,ClickEvent> clickEventMap;
 
-    public EnclosingSet(String packageName, TypeMirror sourceType, String sourceName) {
+    public EnclosingSet2(String packageName, TypeMirror sourceType, String sourceName) {
         this.packageName = packageName;
         this.sourceType = sourceType;
         this.sourceName = sourceName;
 
         stateMap = new HashMap<>();
         fieldMap = new HashMap<>();
+        clickEventMap = new UniqueHashMap<>();
     }
 
 
@@ -60,6 +63,7 @@ public class EnclosingSet {
 
     public JavaFile generateJavaFile() {
         ClassName observerBuilder = ClassName.get("com.virtualightning.stateframework.state","ObserverBuilder");
+        ClassName viewCls = ClassName.get("android.view","View");
         TypeName typeName = TypeName.get(sourceType);
 
 
@@ -129,18 +133,55 @@ public class EnclosingSet {
                 .methodBuilder("bindView")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .addParameter(TypeName.get(sourceType),"source");
+                .addParameter(TypeName.get(sourceType),"source")
+                .addParameter(viewCls,"view");
+
+        viewMethodBuilder.beginControlFlow("if(view == null)");
 
         for(FieldElem elem : fieldMap.values()) {
             viewMethodBuilder.addStatement("source.$L = ($T)source.findViewById($L)",elem.fieldName,elem.fieldType,elem.viewId);
         }
 
+        viewMethodBuilder.endControlFlow()
+                .beginControlFlow("else");
+
+        for(FieldElem elem : fieldMap.values()) {
+            viewMethodBuilder.addStatement("source.$L = ($T)view.findViewById($L)",elem.fieldName,elem.fieldType,elem.viewId);
+        }
+
+        MethodSpec.Builder eventMethodBuilder = MethodSpec
+                .methodBuilder("bindEvent")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .addParameter(TypeName.get(sourceType),"source",Modifier.FINAL)
+                .addParameter(viewCls,"view");
+
+        eventMethodBuilder.beginControlFlow("if(view == null)");
+
+        HashMap<String,TypeSpec> listenerMap = new HashMap<>();
+        for(ClickEvent clickEvent : clickEventMap.values()) {
+            TypeSpec annonymousCls = listenerMap.get(clickEvent.methodName);
+            if(annonymousCls == null) {
+                annonymousCls = TypeSpec.anonymousClassBuilder("")
+                        .addSuperinterface(ClassName.get("android.view","View.OnClickListener"))
+                        .addMethod(MethodSpec.methodBuilder("onClick")
+                                .addAnnotation(Override.class)
+                                .addModifiers(Modifier.PUBLIC)
+                                .addParameter(viewCls,"view")
+                                .addStatement("source.")
+                                .build())
+                        .build();
+                listenerMap.put(clickEvent.methodName,annonymousCls);
+            }
+            eventMethodBuilder.addStatement("source.findViewById($L).$L($L)",clickEvent.viewId,clickEvent.viewId,annonymousCls);
+        }
 
         TypeSpec.Builder typeSpec = TypeSpec.classBuilder(sourceName + "$$$AnnotationBinder")
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(ParameterizedTypeName.get(ClassName.get("com.virtualightning.stateframework.state","AnnotationBinder"),TypeName.get(sourceType)))
+                .addSuperinterface(ParameterizedTypeName.get(ClassName.get("com.virtualightning.stateframework.state","AnnotationBinder"),TypeName.get()))
                 .addMethod(stateMethodBuilder.build())
-                .addMethod(viewMethodBuilder.build());
+                .addMethod(viewMethodBuilder.build())
+                .addMethod(eventMethodBuilder.build());
 
         return JavaFile.builder(packageName,typeSpec.build()).build();
     }

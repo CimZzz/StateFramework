@@ -12,14 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.util.Elements;
 
 /**
  * Created by CimZzz on 3/5/17.<br>
@@ -29,8 +26,8 @@ import javax.lang.model.util.Elements;
  * Description
  */
 public class HTTPAnalyzer extends Analyzer {
-    public HTTPAnalyzer(Messager mMessager, Filer filer, Elements elements) {
-        super(mMessager, filer, elements);
+    public HTTPAnalyzer() {
+
     }
 
     @Override
