@@ -1,18 +1,10 @@
 package com.virtualightning.stateframework;
 
 import com.google.auto.service.AutoService;
-import com.virtualightning.stateframework.anno.BindHTTPRequest;
-import com.virtualightning.stateframework.anno.BindObserver;
-import com.virtualightning.stateframework.anno.BindView;
-import com.virtualightning.stateframework.anno.OnClick;
-import com.virtualightning.stateframework.anno.VLMultiFile;
-import com.virtualightning.stateframework.anno.VLNamePair;
-import com.virtualightning.stateframework.anno.VLUrlParams;
 import com.virtualightning.stateframework.http.HTTPAnalyzer;
 import com.virtualightning.stateframework.state.StateAnalyzer;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +18,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class BindProcessor extends AbstractProcessor {
@@ -65,13 +56,15 @@ public class BindProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-
         if(runCount ++ > 0)
             return false;
 
-        for (Analyzer analyzer : analyzerList)
-            analyzer.analyze(roundEnv);
-
+        try {
+            for (Analyzer analyzer : analyzerList)
+                analyzer.analyze(roundEnv);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 

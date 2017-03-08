@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
+@SuppressWarnings("unused")
 public @interface BindView {
     /**
      * @return 视图ID

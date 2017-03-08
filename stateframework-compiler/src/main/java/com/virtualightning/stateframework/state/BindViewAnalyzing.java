@@ -46,7 +46,6 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
 
         String className = enclosingSet.createEnclosingClass(typeElement);
 
-
         BindView bindView = element.getAnnotation(BindView.class);
         BindViewElem bindViewElem = new BindViewElem();
         bindViewElem.viewId = bindView.value();
@@ -54,7 +53,7 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
         bindViewElem.fieldName = element.getSimpleName().toString();
 
         if(!sourceManager.putSource(className,bindViewElem.viewId,bindViewElem)) {
-            error("视图ID不能相同,视图ID : " + bindViewElem.viewId + " ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
+            error("@BindView 视图ID不能相同 ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
             return false;
         }
 

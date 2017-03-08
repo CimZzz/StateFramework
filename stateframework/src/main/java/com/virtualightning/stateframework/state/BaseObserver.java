@@ -13,5 +13,5 @@ public abstract class BaseObserver {
     int refType;
     boolean allowStop;
 
-    protected abstract void notify(Object... objects);
+    public abstract void notify(Object... objects);
 }

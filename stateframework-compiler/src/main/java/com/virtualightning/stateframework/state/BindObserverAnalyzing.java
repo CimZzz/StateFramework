@@ -8,6 +8,7 @@ import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
 import com.virtualightning.stateframework.anno.BindObserver;
+import com.virtualightning.stateframework.constant.ReferenceType;
 
 import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
@@ -55,7 +56,7 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
         BindObserver bindObserver = element.getAnnotation(BindObserver.class);
         BindObserverElem bindObserverElem = new BindObserverElem();
         bindObserverElem.allowStop = bindObserver.allowStop();
-        bindObserverElem.refType = bindObserver.refType();
+        bindObserverElem.refType = ReferenceType.STRONG;
         bindObserverElem.runType = bindObserver.runType();
         bindObserverElem.stateId = bindObserver.stateId();
         bindObserverElem.methodName = element.getSimpleName().toString();
@@ -96,8 +97,8 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
                 .methodBuilder("bindState")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
-                .addParameter(stateRecordCls,"stateRecord")
-                .addParameter(enclosingClass.classType,"source");
+                .addParameter(enclosingClass.classType,"source")
+                .addParameter(stateRecordCls,"stateRecord");
 
         if(uniqueHashMap == null || uniqueHashMap.size() == 0)
             return stateMethodBuilder;

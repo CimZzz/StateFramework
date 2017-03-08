@@ -3,7 +3,7 @@ package com.virtualightning.stateframework.http;
 import com.virtualightning.stateframework.utils.FindUtils;
 
 import java.net.HttpURLConnection;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -15,16 +15,17 @@ import java.util.concurrent.Executors;
  */
 @SuppressWarnings("unused")
 public final class HTTPClient {
-    Executor threadPool;
+    ExecutorService threadPool;
 
     HTTPClient(Builder builder) {
         this.threadPool = builder.threadPool != null ? builder.threadPool : Executors.newCachedThreadPool();
     }
 
-    public static class Builder {
-        Executor threadPool;
 
-        public Builder threadPool(Executor executor) {
+    public static class Builder {
+        ExecutorService threadPool;
+
+        public Builder threadPool(ExecutorService executor) {
             this.threadPool = executor;
             return this;
         }
@@ -53,7 +54,7 @@ public final class HTTPClient {
         }
     }
 
-    public void enqueue(final Request request, final IHTTPCallback callback) {
+    public void enqueue(final Request request,final IHTTPCallback callback) {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -70,5 +71,9 @@ public final class HTTPClient {
     public void enqueue(Object object, final IHTTPCallback callback) {
         final Request request = FindUtils.findTransferClassByObject(object).transferData(object);
         enqueue(request,callback);
+    }
+
+    public void close() {
+        threadPool.shutdownNow();
     }
 }

@@ -6,12 +6,11 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.VLUrlParams;
+import com.virtualightning.stateframework.constant.Charset;
 import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -56,7 +55,7 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
 
         VariableElement variableElement = (VariableElement) element;
         /*绑定的属性类型必须为 String,且 HTTP 请求的方法必须为 GET*/
-        if(!variableElement.asType().toString().equals("java.io.File")) {
+        if(!variableElement.asType().toString().equals("java.lang.String")) {
             error("@VLUrlParams 绑定属性类型必须为 String ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
@@ -67,7 +66,7 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
 
         VLUrlParams vlUrlParams = element.getAnnotation(VLUrlParams.class);
 
-        if(sourceManager.putSource(enclosingClass.className,vlUrlParams.value(),element.getSimpleName().toString())) {
+        if(!sourceManager.putSource(enclosingClass.className,vlUrlParams.value(),element.getSimpleName().toString())) {
             error("@VLUrlParams 绑定属性填充位置不可重复 index:" + vlUrlParams.value() + " ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
@@ -84,13 +83,77 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         UniqueHashMap<Object,String> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+        String url = (String) enclosingClass.getResource("URL");
+
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0) {
+            builder.addStatement("requestBuilder.url($S)",url);
             return builder;
+        }
 
-        ClassName namePairCls = ClassName.get("com.virtualightning.stateframework.http","NamePair");
+        ClassName URLEncodeUtilsCls = ClassName.get("com.virtualightning.stateframework.utils","URLEncodeUtils");
+        Charset charset = (Charset) enclosingClass.getResource("Charset");
 
-        for(Map.Entry<Object,String> entry : uniqueHashMap.entrySet())
-            builder.addStatement("requestBuilder.addFormData(new $T($S,rawData.$L))",namePairCls,entry.getKey(),entry.getValue());
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append("\"");
+        int length = url.length();
+        int urlParamsIndex = 0;
+        int tokenFlag = 0;
+        for(int i = 0 ; i < length ; i ++) {
+            char c = url.charAt(i);
+
+            if(c == '{' && tokenFlag == 0) {
+                tokenFlag = 1;
+                continue;
+            } else if (c == '$' && tokenFlag == 1) {
+                tokenFlag = 2;
+                continue;
+            }else if (c == '}' && tokenFlag == 2) {
+                tokenFlag = 3;
+                String params = uniqueHashMap.get(urlParamsIndex++);
+                if(params != null) {
+                    tokenFlag = 0;
+                    String paramsIndex = "params" + (urlParamsIndex - 1);
+                    builder.addStatement("$T "+ paramsIndex + "=$T.encodeContent(rawData." + params + ",$T.$L)",String.class,URLEncodeUtilsCls,charset.getClass(),charset);
+                    urlBuilder.append("\"+").append(paramsIndex).append("+\"");
+                    continue;
+                }
+            }
+
+            switch (tokenFlag) {
+                case 1:
+                    urlBuilder.append('{');
+                    tokenFlag = 0;
+                    break;
+                case 2:
+                    urlBuilder.append('{');
+                    urlBuilder.append('$');
+                    tokenFlag = 0;
+                    break;
+                case 3:
+                    urlBuilder.append('{');
+                    urlBuilder.append('$');
+                    urlBuilder.append('}');
+                    tokenFlag = 0;
+                    break;
+            }
+
+            urlBuilder.append(c);
+        }
+
+
+
+        switch (tokenFlag) {
+            case 1:
+                urlBuilder.append('{');
+                break;
+            case 2:
+                urlBuilder.append('{');
+                urlBuilder.append('$');
+                break;
+        }
+
+        urlBuilder.append("\"");
+        builder.addStatement("requestBuilder.url($L)",urlBuilder.toString());
 
         return builder;
     }

@@ -49,21 +49,30 @@ public class OnClickAnalyzing extends AnalyzingElem<OnClickAnalyzing.OnClickElem
         }
 
         String className = enclosingSet.createEnclosingClass(typeElement);
+        boolean hasParams = true;
 
         List<? extends VariableElement> list = executableElement.getParameters();
 
-        if(list.size() != 1 || !list.get(0).asType().toString().equals("android.view.View")) {
-            error("@OnClick 委托方法参数错误，必须为 android.view.View ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
+        if(list.size() > 1) {
+            error("@OnClick 委托方法参数长度上限为4个，类型可选 View ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
             return false;
         }
+        else if(list.size() == 1 && !list.get(0).asType().toString().equals("android.view.View")) {
+            error("@OnClick 委托方法参数错误，必须为 View ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
+            return false;
+        }
+        else if(list.size() == 0){
+            hasParams = false;
+        }
+
 
         OnClick onClick = element.getAnnotation(OnClick.class);
-
         for(int viewId : onClick.value()) {
             OnClickElem onClickElem = new OnClickElem();
             onClickElem.viewId = viewId;
             onClickElem.listenerDesc = onClick.listenerDesc();
             onClickElem.methodName = element.getSimpleName().toString();
+            onClickElem.hasParams = hasParams;
 
             if(!sourceManager.putSource(className,onClickElem.viewId,onClickElem)) {
                 error("@OnClick 一个视图不能同时绑定多个Click方法 ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
@@ -81,7 +90,8 @@ public class OnClickAnalyzing extends AnalyzingElem<OnClickAnalyzing.OnClickElem
         ClassName viewCls = ClassName.get("android.view","View");
         ClassName clickListenerCls = ClassName.get("android.view","View.OnClickListener");
 
-        MethodSpec.Builder eventMethodBuilder = MethodSpec
+        if(builder == null)
+            builder = MethodSpec
                 .methodBuilder("bindEvent")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
@@ -89,43 +99,39 @@ public class OnClickAnalyzing extends AnalyzingElem<OnClickAnalyzing.OnClickElem
                 .addParameter(viewCls,"view");
 
         if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return eventMethodBuilder;
+            return builder;
 
-        eventMethodBuilder.beginControlFlow("if(view == null)");
 
         HashMap<String,TypeSpec> listenerMap = new HashMap<>();
+
+
         for(OnClickElem clickElem : uniqueHashMap.values()) {
             TypeSpec annonymousCls = listenerMap.get(clickElem.methodName);
             if(annonymousCls == null) {
+                String stateMentFormat = clickElem.hasParams ? "view" : "";
+
                 annonymousCls = TypeSpec.anonymousClassBuilder("")
                         .addSuperinterface(clickListenerCls)
                         .addMethod(MethodSpec.methodBuilder("onClick")
                                 .addAnnotation(Override.class)
                                 .addModifiers(Modifier.PUBLIC)
                                 .addParameter(viewCls,"view")
-                                .addStatement("source.")
+                                .addStatement("source.$L($L)",clickElem.methodName,stateMentFormat)
                                 .build())
                         .build();
                 listenerMap.put(clickElem.methodName,annonymousCls);
             }
-            eventMethodBuilder.addStatement("source.findViewById($L).$L($L)",clickElem.viewId,clickElem.viewId,annonymousCls);
+            builder.addStatement("view.findViewById($L).$L($L)",clickElem.viewId,clickElem.listenerDesc,annonymousCls);
         }
 
-        eventMethodBuilder.endControlFlow().beginControlFlow("else");
 
-        for(OnClickElem clickElem : uniqueHashMap.values()) {
-            TypeSpec annonymousCls = listenerMap.get(clickElem.methodName);
-            eventMethodBuilder.addStatement("source.findViewById($L).$L($L)",clickElem.viewId,clickElem.viewId,annonymousCls);
-        }
-
-        eventMethodBuilder.endControlFlow();
-
-        return eventMethodBuilder;
+        return builder;
     }
 
     static class OnClickElem {
         int viewId;
         String listenerDesc;
         String methodName;
+        boolean hasParams;
     }
 }

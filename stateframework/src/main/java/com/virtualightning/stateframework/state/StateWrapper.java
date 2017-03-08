@@ -47,10 +47,11 @@ public abstract class StateWrapper {
     }
 
     public synchronized final void notifyReally(Object... args) {
-        observerReference.getObserver().notify(args);
+        observerReference.notify(args);
     }
-    public abstract void notifyAction(Object... args);
     public boolean notifyCallBack(Object obj) {
         return true;
     }
+
+    public abstract void notifyAction(Object... args);
 }

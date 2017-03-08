@@ -5,6 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import java.lang.annotation.Annotation;
 
 import javax.annotation.processing.Messager;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
@@ -27,9 +28,18 @@ public abstract class AnalyzingElem<T> {
         modifyValidHelper = new ModifyValidHelper();
     }
 
-    public final void init(Messager messager, Elements elements) {
+    void init(Messager messager, Elements elements) {
         this.messager = messager;
         this.elements = elements;
+    }
+
+    public boolean distinguishElement(RoundEnvironment roundEnv,EnclosingSet enclosingSet) {
+        for(Element element : roundEnv.getElementsAnnotatedWith(getSupportAnnotation())) {
+            if (!handleElement(element,enclosingSet))
+                return false;
+        }
+
+        return true;
     }
 
     public abstract Class<? extends Annotation> getSupportAnnotation();

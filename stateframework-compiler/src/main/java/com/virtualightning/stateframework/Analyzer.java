@@ -41,7 +41,9 @@ public abstract class Analyzer {
 
     public void getSupportedAnnotationTypes(Set<String> annotations) {
         for(AnalyzingElem elem : analyzingElemList)
-            annotations.add(elem.getSupportAnnotation().getName());
+            if(elem instanceof AnalyzeGroup)
+                ((AnalyzeGroup)elem).getSupportedAnnotationTypes(annotations);
+            else annotations.add(elem.getSupportAnnotation().getName());
     }
 
 

@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="strArray">
-        <item>测试:绑定视图与事件测试</item>
+    <string-array name="mainItem">
+        <item>测试:绑定视图、事件、资源和状态观察者测试</item>
+        <item>测试:HTTP通信测试(需自行搭建服务器)</item>
+    </string-array>
+
+
+    <string-array name="stateItem">
+        <item>测试:绑定视图与事件</item>
+        <item>测试:绑定状态观察者(StateRecord)</item>
+        <item>进阶:视图、事件和状态记录之间的连用</item>
+    </string-array>
+
+    <string-array name="state1">
+        <item>虚无</item>
+        <item>居住在一颗原子的内部</item>
+        <item>虚无没有开始也不会有结束</item>
+        <item>一根琴弦弹破一盆肥皂泡</item>
+        <item>无数个宇宙</item>
+        <item>仙女座的火焰逐渐冷却</item>
+        <item>从那灰烬中走出来的姑娘</item>
+        <item>她爱上了狮子</item>
+        <item>水晶鞋滴血</item>
+        <item>时间高坐在他的王位上</item>
+        <item>一个人</item>
+        <item>把玩皇冠上的太阳</item>
+        <item>以上资源来自网络 https://zhidao.baidu.com/question/1768702917104261340.html</item>
+    </string-array>
+
+
+    <string-array name="httpItem">
+        <item>测试:构建GET请求</item>
     </string-array>
 </resources>

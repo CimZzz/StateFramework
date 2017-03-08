@@ -11,12 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".state.StateMainActivity"/>
+        <activity android:name=".state.BindViewEventResActivity"/>
+        <activity android:name=".state.BindStateObserverActivity"/>
+        <activity android:name=".state.AdvanceActivity"/>
+        <activity android:name=".http.HTTPMainActivity"/>
+        <activity android:name=".http.GetActivity"/>
     </application>
 
 </manifest>

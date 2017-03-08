@@ -4,6 +4,7 @@ import com.virtualightning.stateframework.constant.Charset;
 import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -108,7 +109,7 @@ public final class Request {
             throw new RuntimeException("使用了错误的请求方法:" + method + "  定位请求URL为:" + url,e);
         } catch (MalformedURLException e) {
             throw new RuntimeException("URL地址错误:" + url,e);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw e;
         }
     }

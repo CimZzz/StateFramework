@@ -8,13 +8,10 @@ import com.virtualightning.stateframework.Analyzer;
 import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
-import com.virtualightning.stateframework.PipeLineHandler;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 
 /**
  * Created by CimZzz on 3/4/17.<br>
@@ -24,25 +21,26 @@ import javax.lang.model.element.Element;
  * Description
  */
 public class StateAnalyzer extends Analyzer {
-
     public StateAnalyzer() {
         super(new EnclosingSet("$$$","AnnotationBinder"));
+
         analyzingElemList.add(new BindViewAnalyzing());
         analyzingElemList.add(new BindObserverAnalyzing());
-        analyzingElemList.add(new OnClickAnalyzing());
+        analyzingElemList.add(new BindResourcesAnalyzing());
+        analyzingElemList.add(new EventAnalyzeGroup(
+                new OnClickAnalyzing(),
+                new OnItemClickAnalyzing()
+        ));
+
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void analyze(final RoundEnvironment roundEnv) {
-        boolean runFlag = true;
+    public void analyze(RoundEnvironment roundEnv) {
+        for(AnalyzingElem analyzingElem : analyzingElemList)
+            if(!analyzingElem.distinguishElement(roundEnv,enclosingSet))
+                return;
 
-        for(AnalyzingElem analyzingElem : analyzingElemList) {
-            Class<? extends Annotation> annotationCls = analyzingElem.getSupportAnnotation();
-            for(Element element : roundEnv.getElementsAnnotatedWith(annotationCls))
-                if (!analyzingElem.handleElement(element,enclosingSet))
-                    return;
-        }
 
         for(EnclosingClass enclosingClass : enclosingSet.values()) {
             TypeSpec.Builder builder = enclosingClass.prepare();
@@ -54,8 +52,6 @@ public class StateAnalyzer extends Analyzer {
 
             for(AnalyzingElem analyzingElem : analyzingElemList) {
                 MethodSpec.Builder methodSpecBuilder = analyzingElem.generateMethod(null,enclosingClass);
-                if(methodSpecBuilder == null)
-                    continue;
 
                 builder.addMethod(methodSpecBuilder.build());
             }

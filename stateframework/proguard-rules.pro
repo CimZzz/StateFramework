@@ -15,10 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep public class * implements com.virtualightning.stateframework.core.AnnotationBinder
+-keep public class * implements com.virtualightning.stateframework.state.AnnotationBinder
+-keep public class * implements com.virtualightning.stateframework.http.RequestTransform
 
 # Prevent obfuscation of types which use ButterKnife annotations since the simple name
 # is used to reflectively look up the generated ViewBinding.
--keep class com.virtualightning.*
+-keep class com.virtualightning.stateframework.*
 -keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.* <methods>; }
 -keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.* <fields>; }

@@ -1,5 +1,6 @@
 package com.virtualightning.stateframework.state.wrappers;
 
+import android.os.Looper;
 import android.os.Message;
 
 import com.virtualightning.stateframework.state.BaseObserver;
@@ -26,16 +27,20 @@ public final class MainLoopSeqWrapper extends StateWrapper {
 
     @Override
     public void notifyAction(Object... args) {
-        sequenceId ++;
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            notifyReally(args);
+        } else {
+            sequenceId++;
 
-        if(sequenceId == Integer.MAX_VALUE)
-            sequenceId = 0;
+            if (sequenceId == Integer.MAX_VALUE)
+                sequenceId = 0;
 
-        Message message = MainLoopCall.getInstance().obtainMessage();
-        message.what = MainLoopCall.MSG_STATE_UPDATE;
-        message.obj = new Object[]{this,args};
-        message.arg1 = sequenceId;
-        message.sendToTarget();
+            Message message = MainLoopCall.getInstance().obtainMessage();
+            message.what = MainLoopCall.MSG_STATE_UPDATE;
+            message.obj = new Object[]{this, args};
+            message.arg1 = sequenceId;
+            message.sendToTarget();
+        }
     }
 
 

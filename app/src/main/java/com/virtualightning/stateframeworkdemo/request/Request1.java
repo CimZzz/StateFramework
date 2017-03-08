@@ -1,8 +1,8 @@
 package com.virtualightning.stateframeworkdemo.request;
 
 import com.virtualightning.stateframework.anno.BindHTTPRequest;
-import com.virtualightning.stateframework.anno.VLNamePair;
 import com.virtualightning.stateframework.constant.RequestMethod;
+import com.virtualightning.stateframeworkdemo.http.HTTP;
 
 
 /**
@@ -13,10 +13,8 @@ import com.virtualightning.stateframework.constant.RequestMethod;
  * Description
  */
 @BindHTTPRequest(
-        url = "http://192.168.1.100/StormLive-PHP/index.php2222",
-        method = RequestMethod.POST
+        url = HTTP.HTTP1,
+        method = RequestMethod.GET
 )
-public class TestRequest {
-    @VLNamePair("123")
-    String f;
+public class Request1 {
 }

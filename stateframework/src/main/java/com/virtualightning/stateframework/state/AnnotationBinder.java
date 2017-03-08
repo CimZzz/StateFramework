@@ -1,5 +1,6 @@
 package com.virtualightning.stateframework.state;
 
+import android.content.res.Resources;
 import android.view.View;
 
 /**
@@ -10,7 +11,8 @@ import android.view.View;
  * Description
  */
 public interface AnnotationBinder<T> {
-    void bindState(StateRecord stateRecord, T source);
+    void bindState(T source,StateRecord stateRecord);
     void bindView(T source,View view);
+    void bindResources(T source, Resources resources);
     void bindEvent(T source,View view);
 }

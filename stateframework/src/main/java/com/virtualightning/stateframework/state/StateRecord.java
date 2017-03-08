@@ -81,6 +81,10 @@ public final class StateRecord {
 
     /*设置运行状态*/
 
+    public boolean isStop() {
+        return innerState.isStop();
+    }
+
     public void setRecordState(boolean isRun) {
         innerState.setStop(!isRun);
     }

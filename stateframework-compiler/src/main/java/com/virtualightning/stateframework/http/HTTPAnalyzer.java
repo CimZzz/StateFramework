@@ -8,13 +8,10 @@ import com.virtualightning.stateframework.Analyzer;
 import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
-import com.virtualightning.stateframework.PipeLineHandler;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 
 /**
  * Created by CimZzz on 3/5/17.<br>
@@ -36,13 +33,9 @@ public class HTTPAnalyzer extends Analyzer {
     @Override
     @SuppressWarnings("unchecked")
     public void analyze(final RoundEnvironment roundEnv) {
-
-        for (AnalyzingElem analyzingElem : analyzingElemList) {
-            Class<? extends Annotation> annotationCls = analyzingElem.getSupportAnnotation();
-            for (Element element : roundEnv.getElementsAnnotatedWith(annotationCls))
-                if (!analyzingElem.handleElement(element, enclosingSet))
-                    return;
-        }
+        for(AnalyzingElem analyzingElem : analyzingElemList)
+            if(!analyzingElem.distinguishElement(roundEnv,enclosingSet))
+                return;
 
         for (EnclosingClass enclosingClass : enclosingSet.values()) {
             TypeSpec.Builder builder = enclosingClass.prepare();
