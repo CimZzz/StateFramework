@@ -16,12 +16,12 @@ annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.3'/
 
 如果想要使用 Observer，必须要有一个 StateRecord（状态记录者）作为 Observer 的集合，以 "key - value" 使 stateId 和 Observer 之间建立联系也就是说每个 Observer 必须所属于 StateRecord , StateRecord 与 Observer 属于一对多的关系。
 
-#### 内部状态观察者的使用
-首先需要一个 StateRecord 的实例
+### 状态观察者的使用
+#### 首先需要一个 StateRecord 的实例
 ```
 StateRecord stateRecord = StateRecord.newInstance(null);//参数为 ClassKey ，注册全局状态观察者需要用到
 ```
-然后以代码的方式或者注解的方式注册 Observer
+#### 然后以代码的方式或者注解的方式注册 Observer
 
 * 代码方式，通过 ObserverBuilder 构建 Observer 所需参数并完成注册
 ```
@@ -39,3 +39,28 @@ StateRecord stateRecord = StateRecord.newInstance(null);//参数为 ClassKey ，
         stateRecord.registerObserver(observerBuilder);//注册状态观察者
 ```
 * 注解方式，需要委托对象与委托方法，下列以 DemoActivity 为例
+```
+public class DemoActivity extends Activity {
+
+    StateRecord stateRecord;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        stateRecord = StateRecord.newInstance(DemoActivity.class);
+        Analyzer.analyzeState(this,stateRecord);
+    }
+
+    @BindObserver(
+            stateId = "S_1",//注册状态ID
+            allowStop = false,//是否允许停止
+            runType = RunType.MAIN_LOOP,//运行类型,当前为运行在主线程
+            isVarParameters = true,//是否使用自变长参数
+            isWholeObserver = false//是否为全局状态观察者
+    )
+    void onNotifyState_1(Object... args) {
+        //通知 Observer 之后所做的一些事
+    }
+}
+```
