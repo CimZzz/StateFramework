@@ -72,6 +72,38 @@ stateRecord.notifyState("S_1",1,2,3,4);//如果你需要传递参数可以这样
 ```
 全局状态观察者
 ```
-StateRecord.notifyWholeState("S_1");//通知全部订阅此状态的状态观察者
+StateRecord.notifyWholeState("S_1");//通知全部订阅 "S_1" 的状态观察者
 ```
-当然也可以通知指定
+当然也可以通知指定的全局状态观察者
+```
+StateRecord.notifyWholeState(ClassKey,"S_1");//通知指定 ClassKey 订阅 "S_1" 的状态观察者
+```
+#### 注销状态
+使用完之后最好是注销状态
+```
+stateRecord.unregisterObserver();
+```
+如果注册了全局状态但并未注册，可能会导致内存泄露
+#### 关于 allowStop 属性
+如果注册 Observer 时启用 allowStop，那么可以通过改变 StateRecord 的状态实现临时禁用 Observer
+```
+stateRecord.setRecordState(false);
+```
+当 StateRecord 的状态为 false时（stop），通知将不会抵达启用 allowStop 的状态观察者
+#### 关于@BindObserver中的 isVarParameters 属性
+如果你明确知道委托函数所需的参数类型,可以禁用 isVarParameters ,通知 Observer 所携带的参数会自动转型填充委托函数参数列表
+```
+@BindObserver(
+    stateId = "S_1",//注册状态ID
+    isVarParameters = false
+)
+void onNotifyState_1(String str1,Integer i) {
+//通知 Observer 之后所做的一些事
+}
+```
+可以使用下列通知方式
+```
+stateRecord.notifyState("S_1","HelloWorld",520);
+```
+不过需要注意的是，当禁用了 isVarParameters 时，通知时所传递的参数类型、顺序、长度必须严格遵守委托函数定义的参数列表，否则会抛出异常
+
