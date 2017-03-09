@@ -1,15 +1,19 @@
 # StateFramework
+## 简介
 StateFramework 以 "状态观察者" 事件为核心的高内聚、低耦合开发框架，兼容性高。
+## 优点
+* 本框架提供代码、注解两种方式实现框架使用
+* 注解只存在于编译期，不存在因为注解而造成的性能问题
 ## 当前版本
 0.1.3
 ## 下载方法
 ### 使用前请确认 buildscript 下 gradle 版本要大于 2.2.0
 ```
 compile 'com.virtualightning.library:stateframework:0.1.3'
-annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.3'//如果你不想用注解的方式绑定可注释此行
+annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.3'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
 ```
 ## 核心功能 : 状态观察者
-
+### 状态观察者简介
 "状态"属于无阈值抽象状态，仅作为唯一标识，而 stateId（状态ID）则是其实体
 
 每个 Observer（状态观察者）对应一个 stateId，如果需要 Observer 执行动作时，可以依靠 stateId 进行通知。
@@ -39,7 +43,7 @@ ObserverBuilder observerBuilder = new ObserverBuilder()
 stateRecord.registerObserver(observerBuilder);//注册内部状态观察者
 //stateRecord.registerWholeObserver(observerBuilder);注册全局状态观察者，ClassKey 为空时会抛出异常
 ```
-* 注解方式，需要委托对象与委托方法，下列以 DemoActivity 为例
+* 注解方式，需要委托对象与委托方法，下列以 DemoActivity 为例 （需要添加注解解释器的依赖）
 ```
 public class DemoActivity extends Activity {
 
@@ -50,11 +54,11 @@ public class DemoActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         stateRecord = StateRecord.newInstance(DemoActivity.class);
-        Analyzer.analyzeState(this,stateRecord);
-    }
+        Analyzer.analyzeState(this,stateRecord);//绑定 DemoActivity 的注解到指定的 StateRecord 上
+    }
 
     @BindObserver(
-            stateId = "S_1",//注册状态ID
+            stateId = "S_1",//注册状态ID 
             allowStop = false,//是否允许停止
             runType = RunType.MAIN_LOOP,//运行类型,当前为运行在主线程
             isVarParameters = true,//是否使用自变长参数
@@ -107,3 +111,54 @@ stateRecord.notifyState("S_1","HelloWorld",520);
 ```
 不过需要注意的是，当禁用了 isVarParameters 时，通知时所传递的参数类型、顺序、长度必须严格遵守委托函数定义的参数列表，否则会抛出异常
 
+## 辅助功能 : 注解绑定注入 （需要添加注解解释器的依赖）
+### 绑定View
+使用 @BindView 绑定控件
+```
+public class DemoActivity extends Activity {
+
+        
+    @BindView(R.id.list)// id 为 R.id.list 必须存在于 R.layout.main
+    ListView list;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        
+        Analyzer.analyzeView(this);//绑定 DemoActivity 的控件
+    }
+}
+```
+### 绑定资源
+```
+public class DemoActivity extends Activity {
+    //资源id = R.array.mainItem , 资源类型 = 字符串数组
+    @BindResources(resId = R.array.mainItem,type = ResType.STRING_ARRAY)
+    String[] strArray;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        Analyzer.analyzeResources(this);//绑定 DemoActivity 的资源
+    }
+}
+```
+### 绑定事件
+以点击事件为例，更多事件请参考[注解类型集合](https://github.com/CimZzz/StateFramework/tree/master/stateframework-anno/src/main/java/com/virtualightning/stateframework/anno)
+```
+public class DemoActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Analyzer.analyzeEvent(this);//绑定 DemoActivity 的资源
+     }
+
+    @OnClick(R.id.list)
+    void OnClick() {
+        //点击事件处理的一些事
+    }
+}
+```
