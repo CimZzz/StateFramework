@@ -163,3 +163,13 @@ public class DemoActivity extends Activity {
     }
 }
 ```
+## 其余暂未上线功能
+* HTTP协议相关
+* 数据库相关
+
+## AndroidStudio 插件
+[布局快速注入工具](https://github.com/CimZzz/StateFramework/blob/master/QuickInjection-Plugin.jar)
+
+## 联系方式
+QQ邮箱 : 1152564696@qq.com
+QQ : 1152564696
