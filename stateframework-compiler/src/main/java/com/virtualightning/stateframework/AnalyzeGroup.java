@@ -61,10 +61,13 @@ public abstract class AnalyzeGroup extends AnalyzingElem {
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         builder = generatedRootMethodBuilder(enclosingClass);
 
+        boolean isExistBuild = false;
         for(AnalyzingElem analyzingElem : analyzingElemArray)
-            analyzingElem.generateMethod(builder,enclosingClass);
+            if(analyzingElem.generateMethod(builder,enclosingClass) != null)
+                isExistBuild =true;
 
-        return builder;
+
+        return isExistBuild ? builder : null;
     }
 
 

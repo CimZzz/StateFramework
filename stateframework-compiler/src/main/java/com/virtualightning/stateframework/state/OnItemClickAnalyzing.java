@@ -119,21 +119,13 @@ public class OnItemClickAnalyzing extends AnalyzingElem<OnItemClickAnalyzing.OnI
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         UniqueHashMap<Object,OnItemClickElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return null;
+
+
         ClassName adapterViewCls = ClassName.get("android.widget","AdapterView");
         ClassName viewCls = ClassName.get("android.view","View");
         ClassName clickListenerCls = ClassName.get("android.widget","AdapterView.OnItemClickListener");
-
-        if(builder == null)
-            builder = MethodSpec
-                    .methodBuilder("bindEvent")
-                    .addModifiers(Modifier.PUBLIC)
-                    .addAnnotation(Override.class)
-                    .addParameter(enclosingClass.classType,"source",Modifier.FINAL)
-                    .addParameter(viewCls,"view");
-
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return builder;
-
         HashMap<String,TypeSpec> listenerMap = new HashMap<>();
 
 

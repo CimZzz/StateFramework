@@ -7,10 +7,9 @@ import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
 import com.virtualightning.stateframework.anno.BindResources;
+import com.virtualightning.stateframework.constant.ResType;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -27,15 +26,11 @@ import javax.lang.model.element.VariableElement;
  */
 @SuppressWarnings("unused")
 public class BindResourcesAnalyzing extends AnalyzingElem<BindResourcesAnalyzing.BindResourcesElem> {
-    private Map<String,String> allowBindTypeMap;
 
     public BindResourcesAnalyzing() {
         modifyValidHelper.addBanContain(Modifier.FINAL)
                 .addBanContain(Modifier.STATIC)
                 .addBanContain(Modifier.PRIVATE);
-
-        allowBindTypeMap = new HashMap<>();
-        allowBindTypeMap.put("java.lang.String[]","getStringArray");
     }
 
     @Override
@@ -57,18 +52,19 @@ public class BindResourcesAnalyzing extends AnalyzingElem<BindResourcesAnalyzing
         VariableElement variableElement = (VariableElement) element;
 
         BindResources bindResources = element.getAnnotation(BindResources.class);
+        ResType resType = bindResources.type();
 
         String varClsName = variableElement.asType().toString();
 
-        if(!allowBindTypeMap.containsKey(varClsName)){
+        if(!resType.TypeName.equals(varClsName)){
             error("@BindResources 绑定类型不是合法类型 ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
 
         BindResourcesElem bindResourcesElem = new BindResourcesElem();
-        bindResourcesElem.resId = bindResources.value();
+        bindResourcesElem.resId = bindResources.resId();
         bindResourcesElem.fieldName = element.getSimpleName().toString();
-        bindResourcesElem.searchStatement = allowBindTypeMap.get(varClsName);
+        bindResourcesElem.searchStatement = resType.MethodName;
 
         if(!sourceManager.putSource(className,bindResourcesElem.resId,bindResourcesElem)) {
             error("@BindResources 资源ID不能相同 ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 方法");
@@ -82,14 +78,15 @@ public class BindResourcesAnalyzing extends AnalyzingElem<BindResourcesAnalyzing
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         UniqueHashMap<Object,BindResourcesElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return builder;
+
         builder = MethodSpec.methodBuilder("bindResources")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(enclosingClass.classType,"source")
                 .addParameter(ClassName.get("android.content.res","Resources"),"resources");
 
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return builder;
 
         for(BindResourcesElem bindResourcesElem : uniqueHashMap.values())
             builder.addStatement("source.$L = resources.$L($L)",bindResourcesElem.fieldName,bindResourcesElem.searchStatement,bindResourcesElem.resId);

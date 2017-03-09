@@ -63,17 +63,17 @@ public class BindViewAnalyzing extends AnalyzingElem<BindViewAnalyzing.BindViewE
     @Override
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         UniqueHashMap<Object,BindViewElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
-        ClassName viewCls = ClassName.get("android.view","View");
 
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return builder;
+
+        ClassName viewCls = ClassName.get("android.view","View");
         MethodSpec.Builder viewMethodBuilder = MethodSpec
                 .methodBuilder("bindView")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .addParameter(enclosingClass.classType,"source")
                 .addParameter(viewCls,"view");
-
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return viewMethodBuilder;
 
 
         Collection<BindViewElem> bindViewElems = uniqueHashMap.values();

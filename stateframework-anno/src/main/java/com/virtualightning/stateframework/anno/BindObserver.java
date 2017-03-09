@@ -1,6 +1,5 @@
 package com.virtualightning.stateframework.anno;
 
-import com.virtualightning.stateframework.constant.ReferenceType;
 import com.virtualightning.stateframework.constant.RunType;
 
 import java.lang.annotation.ElementType;
@@ -40,4 +39,10 @@ public @interface BindObserver {
      * @return 是否为自变长参数
      */
     boolean isVarParameters() default true;
+
+
+    /**
+     * @return 是否为全局观察者
+     */
+    boolean isWholeObserver() default false;
 }

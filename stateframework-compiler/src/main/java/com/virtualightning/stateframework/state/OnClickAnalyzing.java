@@ -87,20 +87,13 @@ public class OnClickAnalyzing extends AnalyzingElem<OnClickAnalyzing.OnClickElem
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
         UniqueHashMap<Object,OnClickElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return null;
+
+
+
         ClassName viewCls = ClassName.get("android.view","View");
         ClassName clickListenerCls = ClassName.get("android.view","View.OnClickListener");
-
-        if(builder == null)
-            builder = MethodSpec
-                .methodBuilder("bindEvent")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .addParameter(enclosingClass.classType,"source",Modifier.FINAL)
-                .addParameter(viewCls,"view");
-
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return builder;
-
 
         HashMap<String,TypeSpec> listenerMap = new HashMap<>();
 

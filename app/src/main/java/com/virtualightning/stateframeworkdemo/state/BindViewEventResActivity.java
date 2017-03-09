@@ -13,6 +13,7 @@ import com.virtualightning.stateframework.anno.BindResources;
 import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.OnClick;
 import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;
 
@@ -41,7 +42,7 @@ public class BindViewEventResActivity extends Activity {
     /**
      * 根据资源ID绑定资源
      */
-    @BindResources(R.array.state1)
+    @BindResources(resId = R.array.state1,type = ResType.STRING_ARRAY)
     String[] strArray;
 
 

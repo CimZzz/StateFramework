@@ -54,6 +54,7 @@ public final class ObserverBuilder {
         return this;
     }
 
+
     public BaseObserver build() {
         if(stateId == null || observer == null)
             throw new RuntimeException("在构建Observer时stateId,observer不能为空");

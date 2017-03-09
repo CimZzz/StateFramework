@@ -12,7 +12,7 @@ import com.virtualightning.stateframework.state.reference.WeakObserverRef;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * Description
+ * 状态包装器
  */
 @SuppressWarnings("unused")
 public abstract class StateWrapper {
@@ -31,14 +31,14 @@ public abstract class StateWrapper {
                 observerReference = new StrongObserverRef(observer);
                 break;
             default:
-                observerReference = new NullObserverRef(observer);
+                observerReference = new NullObserverRef();
                 break;
         }
-
+        observer.reference = observerReference;
         this.innerState = innerState;
     }
 
-    synchronized final void notify(Object... args) {
+    synchronized void notify(Object... args) {
         BaseObserver observer = observerReference.getObserver();
         if(observer == null || (observer.allowStop && innerState.isStop()))
             return;

@@ -3,28 +3,33 @@ package com.virtualightning.stateframework.state.reference;
 import com.virtualightning.stateframework.state.BaseObserver;
 
 /**
- * Created by CimZzz on 17/2/28.<br>
+ * Created by CimZzz on 17/3/9.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
- * Since : StateFrameWork_0.0.1<br>
- * Modify : StateFrameWork_0.1.2 添加了内部处理{@link #notify(Object...)} 的方法<br>
+ * Since : StateFrameWork_0.1.2<br>
  * Description:<br>
- * 强引用状态观察者
+ * Description
  */
-@SuppressWarnings("unused")
-public class StrongObserverRef implements ObserverReference{
-    private final BaseObserver observer;
+public class StrongObserverRef implements ObserverReference {
+    private PassiveRef<BaseObserver> strongRef;
 
     public StrongObserverRef(BaseObserver observer) {
-        this.observer = observer;
+        this.strongRef = new PassiveRef<>(observer);
     }
 
     @Override
     public BaseObserver getObserver() {
-        return observer;
+        return strongRef.get();
     }
 
     @Override
     public void notify(Object... args) {
-        observer.notify(args);
+        BaseObserver observer = strongRef.get();
+        if(observer != null)
+            observer.notify(args);
+    }
+
+    @Override
+    public void clear() {
+        strongRef.clear();
     }
 }

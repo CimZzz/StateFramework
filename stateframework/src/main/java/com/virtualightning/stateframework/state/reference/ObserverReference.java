@@ -14,4 +14,5 @@ import com.virtualightning.stateframework.state.BaseObserver;
 public interface ObserverReference {
     BaseObserver getObserver();
     void notify(Object... args);
+    void clear();
 }

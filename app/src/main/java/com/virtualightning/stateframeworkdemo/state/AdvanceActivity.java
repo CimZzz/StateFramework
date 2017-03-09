@@ -9,6 +9,7 @@ import com.virtualightning.stateframework.anno.BindObserver;
 import com.virtualightning.stateframework.anno.BindResources;
 import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.OnClick;
+import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.state.StateRecord;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;
@@ -28,7 +29,7 @@ public class AdvanceActivity extends Activity {
     @BindView(R.id.state3_tv)
     TextView tv;
 
-    @BindResources(R.array.state1)
+    @BindResources(resId = R.array.state1,type = ResType.STRING_ARRAY)
     String[] strArray;
 
     StateRecord stateRecord;
@@ -37,7 +38,7 @@ public class AdvanceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_3);
 
-        stateRecord = new StateRecord();
+        stateRecord = StateRecord.newInstance(getClass());
 
         Analyzer.analyzeAll(this,stateRecord);
     }

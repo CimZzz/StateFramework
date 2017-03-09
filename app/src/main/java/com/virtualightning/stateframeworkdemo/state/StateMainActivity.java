@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.virtualightning.stateframework.anno.BindResources;
 import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;
 
@@ -20,7 +21,7 @@ import com.virtualightning.stateframeworkdemo.R;
  * Description
  */
 public class StateMainActivity extends Activity {
-    @BindResources(R.array.stateItem)
+    @BindResources(resId = R.array.stateItem,type = ResType.STRING_ARRAY)
     String[] strArray;
 
     @BindView(R.id.list)
@@ -45,6 +46,9 @@ public class StateMainActivity extends Activity {
                 break;
             case 2:
                 startActivity(new Intent(this,AdvanceActivity.class));
+                break;
+            case 3:
+                startActivity(new Intent(this,A1.class));
                 break;
         }
     }

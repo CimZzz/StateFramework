@@ -35,7 +35,7 @@ public class BindStateObserverActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_2);
-        stateRecord = new StateRecord();
+        stateRecord = StateRecord.newInstance(getClass());
 
         //绑定状态观察者至状态记录中
         //Analyzer.analyzeState(Object,StateRecord);

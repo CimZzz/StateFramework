@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.virtualightning.stateframework.anno.BindResources;
 import com.virtualightning.stateframework.anno.BindView;
 import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;
 
@@ -20,7 +21,7 @@ import com.virtualightning.stateframeworkdemo.R;
  * Description
  */
 public class HTTPMainActivity extends Activity {
-    @BindResources(R.array.httpItem)
+    @BindResources(resId = R.array.httpItem,type = ResType.STRING_ARRAY)
     String[] strArray;
 
     @BindView(R.id.list)

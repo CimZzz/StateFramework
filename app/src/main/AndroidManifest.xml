@@ -23,6 +23,8 @@
         <activity android:name=".state.BindViewEventResActivity"/>
         <activity android:name=".state.BindStateObserverActivity"/>
         <activity android:name=".state.AdvanceActivity"/>
+        <activity android:name=".state.A1"/>
+        <activity android:name=".state.A2"/>
         <activity android:name=".http.HTTPMainActivity"/>
         <activity android:name=".http.GetActivity"/>
     </application>

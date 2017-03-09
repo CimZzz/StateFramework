@@ -2,6 +2,8 @@ package com.virtualightning.stateframework.state;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
@@ -59,6 +61,7 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
         bindObserverElem.refType = ReferenceType.STRONG;
         bindObserverElem.runType = bindObserver.runType();
         bindObserverElem.stateId = bindObserver.stateId();
+        bindObserverElem.isWholeObserver = bindObserver.isWholeObserver();
         bindObserverElem.methodName = element.getSimpleName().toString();
 
         if( !(bindObserverElem.isVarParameters = bindObserver.isVarParameters()) ) {
@@ -88,10 +91,20 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder,EnclosingClass enclosingClass) {
         UniqueHashMap<Object,BindObserverElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
+        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
+            return null;
+
 
         ClassName observerBuilderCls = ClassName.get("com.virtualightning.stateframework.state","ObserverBuilder");
         ClassName stateRecordCls = ClassName.get("com.virtualightning.stateframework.state","StateRecord");
         ClassName baseObserverCls = ClassName.get("com.virtualightning.stateframework.state","BaseObserver");
+        TypeName stateBinderCls = ParameterizedTypeName.get(
+                        ClassName.get("com.virtualightning.stateframework.state","AnnotationBinder.IStateBinder"),
+                        enclosingClass.classType);
+
+        TypeSpec.Builder stateBinderBuilder = TypeSpec.classBuilder("StateBind")
+                .addModifiers(Modifier.PRIVATE,Modifier.STATIC)
+                .addSuperinterface(stateBinderCls);
 
         MethodSpec.Builder stateMethodBuilder =  MethodSpec
                 .methodBuilder("bindState")
@@ -99,9 +112,6 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
                 .addAnnotation(Override.class)
                 .addParameter(enclosingClass.classType,"source")
                 .addParameter(stateRecordCls,"stateRecord");
-
-        if(uniqueHashMap == null || uniqueHashMap.size() == 0)
-            return stateMethodBuilder;
 
         stateMethodBuilder.addStatement("$T observerBuilder",observerBuilderCls)
                 .addStatement("final $T<$T> sourceRef = new $T<>(source)",WeakReference.class,enclosingClass.classType,WeakReference.class);
@@ -156,10 +166,23 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
                     .addStatement("observerBuilder.refType($L)",elem.refType)
                     .addStatement("observerBuilder.runType($L)",elem.runType)
                     .addStatement("observerBuilder.observer($L)",observer)
-                    .addStatement("stateRecord.registerByBuilder(observerBuilder);");
+                    .addStatement(
+                            elem.isWholeObserver ?
+                            "stateRecord.registerWholeObserver(observerBuilder)" :
+                            "stateRecord.registerObserver(observerBuilder)"
+                    );
         }
 
-        return stateMethodBuilder;
+        stateBinderBuilder.addMethod(stateMethodBuilder.build());
+        enclosingClass.prepare().addType(stateBinderBuilder.build());
+
+        builder = MethodSpec.methodBuilder("getStateBinder")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .returns(stateBinderCls)
+                .addStatement("return new StateBind()");
+
+        return builder;
     }
 
     static class BindObserverElem {
@@ -170,6 +193,7 @@ public class BindObserverAnalyzing extends AnalyzingElem<BindObserverAnalyzing.B
         int refType;
 
         boolean isVarParameters;
+        boolean isWholeObserver;
         List<TypeMirror> paramTypes;
     }
 }

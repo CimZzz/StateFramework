@@ -44,7 +44,7 @@ public class StateAnalyzer extends Analyzer {
 
         for(EnclosingClass enclosingClass : enclosingSet.values()) {
             TypeSpec.Builder builder = enclosingClass.prepare();
-            builder.addSuperinterface(
+            builder.superclass(
                     ParameterizedTypeName.get(
                             ClassName.get("com.virtualightning.stateframework.state","AnnotationBinder"),
                             enclosingClass.classType));
@@ -53,7 +53,8 @@ public class StateAnalyzer extends Analyzer {
             for(AnalyzingElem analyzingElem : analyzingElemList) {
                 MethodSpec.Builder methodSpecBuilder = analyzingElem.generateMethod(null,enclosingClass);
 
-                builder.addMethod(methodSpecBuilder.build());
+                if(methodSpecBuilder != null)
+                    builder.addMethod(methodSpecBuilder.build());
             }
 
             try {
