@@ -7,7 +7,7 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.OnClick;
+import com.virtualightning.stateframework.anno.event.OnClick;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;

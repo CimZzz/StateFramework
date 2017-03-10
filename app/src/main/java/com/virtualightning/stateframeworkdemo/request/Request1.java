@@ -1,6 +1,6 @@
 package com.virtualightning.stateframeworkdemo.request;
 
-import com.virtualightning.stateframework.anno.BindHTTPRequest;
+import com.virtualightning.stateframework.anno.http.BindHTTPRequest;
 import com.virtualightning.stateframework.constant.RequestMethod;
 import com.virtualightning.stateframeworkdemo.http.HTTP;
 

@@ -3,16 +3,19 @@ package com.virtualightning.stateframeworkdemo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.virtualightning.stateframework.anno.BindResources;
-import com.virtualightning.stateframework.anno.BindView;
-import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.anno.bind.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindView;
+import com.virtualightning.stateframework.anno.event.OnItemClick;
 import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.http.HTTPMainActivity;
 import com.virtualightning.stateframeworkdemo.state.StateMainActivity;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by CimZzz on 2/28/17.<br>
@@ -27,6 +30,8 @@ public class MainActivity extends Activity {
 
     @BindView(R.id.list)
     ListView list;
+
+    public static WeakReference<Activity> testAcWeakReference = new WeakReference<>(null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,7 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(this,HTTPMainActivity.class));
                 break;
             case 2:
-                break;
-            case 3:
+                Log.d("123123","" + testAcWeakReference.get());
                 break;
         }
     }

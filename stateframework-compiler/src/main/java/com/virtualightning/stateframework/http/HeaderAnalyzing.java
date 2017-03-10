@@ -1,14 +1,11 @@
 package com.virtualightning.stateframework.http;
 
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.VLHeader;
-import com.virtualightning.stateframework.anno.VLNamePair;
-import com.virtualightning.stateframework.constant.RequestMethod;
+import com.virtualightning.stateframework.anno.http.VLHeader;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;

@@ -3,6 +3,12 @@ package com.virtualightning.stateframework.state;
 import android.content.res.Resources;
 import android.view.View;
 
+import com.virtualightning.stateframework.anno.bind.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindView;
+import com.virtualightning.stateframework.anno.event.OnClick;
+import com.virtualightning.stateframework.anno.event.OnItemClick;
+import com.virtualightning.stateframework.anno.state.BindObserver;
+
 /**
  * Created by CimZzz on 17/2/28.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
@@ -12,11 +18,11 @@ import android.view.View;
  * 注解绑定者<br>
  * 处理的注解类型为
  * <ol>
- *     <li>{@link com.virtualightning.stateframework.anno.BindView}</li>
- *     <li>{@link com.virtualightning.stateframework.anno.BindResources}</li>
- *     <li>{@link com.virtualightning.stateframework.anno.BindObserver}</li>
- *     <li>{@link com.virtualightning.stateframework.anno.OnClick}</li>
- *     <li>{@link com.virtualightning.stateframework.anno.OnItemClick}</li>
+ *     <li>{@link BindView}</li>
+ *     <li>{@link BindResources}</li>
+ *     <li>{@link BindObserver}</li>
+ *     <li>{@link OnClick}</li>
+ *     <li>{@link OnItemClick}</li>
  * </ol>
  * @param <T> 泛型参数
  */

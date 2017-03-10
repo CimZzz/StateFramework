@@ -88,6 +88,9 @@ public final class StateRecord {
      * @param builder 状态构建者
      */
     public void registerWholeObserver(ObserverBuilder builder) {
+        if(clsKey == null)
+            throw new RuntimeException("注册全局状态的状态记录者的 ClassKey 不能为空");
+
         BaseObserver observer = builder.build();
 
         String stateId = builder.getStateId();
@@ -120,11 +123,12 @@ public final class StateRecord {
     }
 
     /**
-     * 注销全局状态
+     * 注销全部状态
      */
     public void unregisterObserver() {
         internalMap.clear();
-        StaticStatePool.staticPool.unregisterWholeState(clsKey);
+        if(clsKey != null)
+            StaticStatePool.staticPool.unregisterWholeState(clsKey);
     }
 
     /*唤醒状态观察者方法*/

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.virtualightning.stateframework.anno.OnClick;
+import com.virtualightning.stateframework.anno.event.OnClick;
 import com.virtualightning.stateframework.http.HTTPClient;
 import com.virtualightning.stateframework.http.IHTTPCallback;
 import com.virtualightning.stateframework.http.Response;
@@ -36,7 +36,7 @@ public class GetActivity extends Activity {
     }
 
 
-    @OnClick(R.id.http3_btn)
+    @OnClick(R.id.http1_btn)
     void onSendRequestClick() {
         //发送HTTP请求，这种写法有可能会导致内存泄露，仅供测试使用
         httpClient.enqueue(new Request1(), new IHTTPCallback() {

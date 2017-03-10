@@ -6,7 +6,7 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.VLUrlParams;
+import com.virtualightning.stateframework.anno.http.VLUrlParams;
 import com.virtualightning.stateframework.constant.Charset;
 import com.virtualightning.stateframework.constant.RequestMethod;
 

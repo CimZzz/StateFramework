@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.virtualightning.stateframework.anno.BindResources;
-import com.virtualightning.stateframework.anno.BindView;
-import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.anno.bind.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindView;
+import com.virtualightning.stateframework.anno.event.OnItemClick;
 import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;
@@ -48,7 +48,7 @@ public class StateMainActivity extends Activity {
                 startActivity(new Intent(this,AdvanceActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(this,A1.class));
+                startActivity(new Intent(this,StaticObserverActivity.class));
                 break;
         }
     }

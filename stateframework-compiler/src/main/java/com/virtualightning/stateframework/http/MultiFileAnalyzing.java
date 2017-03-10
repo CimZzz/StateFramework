@@ -6,8 +6,7 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.VLMultiFile;
-import com.virtualightning.stateframework.anno.VLNamePair;
+import com.virtualightning.stateframework.anno.http.VLMultiFile;
 import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.lang.annotation.Annotation;

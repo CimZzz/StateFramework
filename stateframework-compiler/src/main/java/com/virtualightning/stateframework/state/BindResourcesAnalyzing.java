@@ -6,7 +6,7 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindResources;
 import com.virtualightning.stateframework.constant.ResType;
 
 import java.lang.annotation.Annotation;

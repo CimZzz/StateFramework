@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.virtualightning.stateframework.anno.BindResources;
-import com.virtualightning.stateframework.anno.BindView;
-import com.virtualightning.stateframework.anno.OnItemClick;
+import com.virtualightning.stateframework.anno.bind.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindView;
+import com.virtualightning.stateframework.anno.event.OnItemClick;
 import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.utils.Analyzer;
 import com.virtualightning.stateframeworkdemo.R;

@@ -5,7 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.BindView;
+import com.virtualightning.stateframework.anno.bind.BindView;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;

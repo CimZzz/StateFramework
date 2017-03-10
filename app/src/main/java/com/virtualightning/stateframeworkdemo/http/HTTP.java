@@ -8,7 +8,7 @@ package com.virtualightning.stateframeworkdemo.http;
  * Description
  */
 public interface HTTP {
-    String URL_HOST = "http://192.168.18.11/";
+    String URL_HOST = "http://192.168.1.101/StormLive";
 
     String HTTP1 = URL_HOST + "test1.php";
 }

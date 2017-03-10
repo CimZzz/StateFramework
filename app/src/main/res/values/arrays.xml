@@ -3,6 +3,7 @@
     <string-array name="mainItem">
         <item>测试:绑定视图、事件、资源和状态观察者测试</item>
         <item>测试:HTTP通信测试(需自行搭建服务器)</item>
+        <item>3</item>
     </string-array>
 
 
@@ -10,8 +11,7 @@
         <item>测试:绑定视图与事件</item>
         <item>测试:绑定状态观察者(StateRecord)</item>
         <item>进阶:视图、事件和状态记录之间的连用</item>
-        <item>1</item>
-        <item>2</item>
+        <item>进阶:全局状态观察者与事件之间的连用</item>
     </string-array>
 
     <string-array name="state1">

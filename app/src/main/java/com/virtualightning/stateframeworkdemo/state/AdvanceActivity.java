@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.virtualightning.stateframework.anno.BindObserver;
-import com.virtualightning.stateframework.anno.BindResources;
-import com.virtualightning.stateframework.anno.BindView;
-import com.virtualightning.stateframework.anno.OnClick;
+import com.virtualightning.stateframework.anno.state.BindObserver;
+import com.virtualightning.stateframework.anno.bind.BindResources;
+import com.virtualightning.stateframework.anno.bind.BindView;
+import com.virtualightning.stateframework.anno.event.OnClick;
 import com.virtualightning.stateframework.constant.ResType;
 import com.virtualightning.stateframework.state.StateRecord;
 import com.virtualightning.stateframework.utils.Analyzer;
@@ -33,11 +33,13 @@ public class AdvanceActivity extends Activity {
     String[] strArray;
 
     StateRecord stateRecord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_3);
 
+        StateRecord stateRecord = StateRecord.newInstance(getClass());
         stateRecord = StateRecord.newInstance(getClass());
 
         Analyzer.analyzeAll(this,stateRecord);
