@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+package com.virtualightning.stateframework.anno.http;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * http://localhost/?ss={$}&amp;s2={$}<br>
  * 可以通过此注解填充URL形成完整的路径,只能修饰String类型的属性
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
 @SuppressWarnings("unused")
 public @interface VLUrlParams {

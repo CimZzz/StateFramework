@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+package com.virtualightning.stateframework.anno.state;
 
 import com.virtualightning.stateframework.constant.RunType;
 
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * Description:<br>
  * 绑定观察者注解，通过注解预编译成代码
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
 @SuppressWarnings("unused")
 public @interface BindObserver {

@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+package com.virtualightning.stateframework.anno.http;
 
 /**
  * Created by CimZzz on 3/5/17.<br>
@@ -13,7 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
 @SuppressWarnings("unused")
 public @interface VLHeader {

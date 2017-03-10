@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+    package com.virtualightning.stateframework.anno.bind;
 
 import com.virtualightning.stateframework.constant.ResType;
 
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * Description:<br>
  * 绑定资源
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
 @SuppressWarnings("unused")
 public @interface BindResources {

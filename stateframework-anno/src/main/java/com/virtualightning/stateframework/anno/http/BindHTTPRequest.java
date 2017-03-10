@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+package com.virtualightning.stateframework.anno.http;
 
 import com.virtualightning.stateframework.constant.Charset;
 import com.virtualightning.stateframework.constant.RequestMethod;
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * Description:<br>
  * 绑定HTTP请求注解<br>
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 @SuppressWarnings("unused")
 public @interface BindHTTPRequest {

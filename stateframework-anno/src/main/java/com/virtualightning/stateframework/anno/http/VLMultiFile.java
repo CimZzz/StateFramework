@@ -1,4 +1,4 @@
-package com.virtualightning.stateframework.anno;
+package com.virtualightning.stateframework.anno.http;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * POST文件上传<br>
  * 只能修饰File类型的属性
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)
 @SuppressWarnings("unused")
 public @interface VLMultiFile {

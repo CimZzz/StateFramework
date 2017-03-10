@@ -9,7 +9,7 @@ import com.virtualightning.stateframework.AnalyzingElem;
 import com.virtualightning.stateframework.EnclosingClass;
 import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
-import com.virtualightning.stateframework.anno.BindObserver;
+import com.virtualightning.stateframework.anno.state.BindObserver;
 import com.virtualightning.stateframework.constant.ReferenceType;
 
 import java.lang.annotation.Annotation;
