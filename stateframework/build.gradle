@@ -22,7 +22,7 @@ dependencies {
 }
 
 
-//apply from: rootProject.file('gradle/upload.gradle')
+apply from: rootProject.file('gradle/upload.gradle')
 
 //
 //def siteUrl = 'https://www.virtual-lightning'   // 项目的主页
