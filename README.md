@@ -168,10 +168,11 @@ public class DemoActivity extends Activity {
 * 数据库相关
 
 ## AndroidStudio 插件
-[布局快速注入工具](https://github.com/CimZzz/StateFramework/blob/master/QuickInjection-Plugin.jar)
+[布局快速注入工具安装指南](https://github.com/CimZzz/StateFramework/blob/master/PLUGIN.md)
 
 ## 联系方式
 绑定资源 和 事件绑定并不全面，目前只涉及到我项目用的到的，如果需要扩展更多自动注解绑定请联系我
 
 QQ邮箱 : 1152564696@qq.com
+
 QQ : 1152564696
