@@ -171,5 +171,7 @@ public class DemoActivity extends Activity {
 [布局快速注入工具](https://github.com/CimZzz/StateFramework/blob/master/QuickInjection-Plugin.jar)
 
 ## 联系方式
+BindResource 和 事件绑定并不全面，目前只涉及到我项目用的到的，如果需要扩展更多自动注解绑定请联系我
+
 QQ邮箱 : 1152564696@qq.com
 QQ : 1152564696
