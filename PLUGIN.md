@@ -16,4 +16,4 @@
 快捷键
 * Mac 下缺省为 Command + N
 * Windows 下缺省为 Alt + Insert
-![image](https://github.com/CimZzz/StateFramework/blob/master/raw/plugin2.png)
+![image](https://github.com/CimZzz/StateFramework/blob/master/raw/plugin3.png)
