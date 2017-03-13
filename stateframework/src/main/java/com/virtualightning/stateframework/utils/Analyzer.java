@@ -118,6 +118,28 @@ public class Analyzer {
         stateBinder.bindView(source,source.getWindow().getDecorView());
         stateBinder.bindResources(source,source.getResources());
         stateBinder.bindEvent(source,source.getWindow().getDecorView());
-        stateBinder.bindState(source,stateRecord);
+        if(stateRecord != null)
+            stateBinder.bindState(source,stateRecord);
+    }
+
+    /**
+     *
+     * 绑定全部注解
+     * @param source 绑定目标
+     * @param rootView 根视图
+     * @param stateRecord 状态记录
+     * @param resources 资源访问类
+     * @param <T> 绑定目标类型
+     */
+    public static <T> void analyzeAll(T source,View rootView,Resources resources,StateRecord stateRecord) {
+        AnnotationBinder<T> stateBinder = FindUtils.findBinderClassByObject(source);
+        if(resources != null)
+            stateBinder.bindResources(source,resources);
+        if(rootView != null) {
+            stateBinder.bindView(source, rootView);
+            stateBinder.bindEvent(source, rootView);
+        }
+        if(stateRecord != null)
+            stateBinder.bindState(source,stateRecord);
     }
 }

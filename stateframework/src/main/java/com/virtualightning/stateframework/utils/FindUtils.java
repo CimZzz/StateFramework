@@ -2,6 +2,7 @@ package com.virtualightning.stateframework.utils;
 
 import com.virtualightning.stateframework.http.RequestTransform;
 import com.virtualightning.stateframework.state.AnnotationBinder;
+import com.virtualightning.stateframework.state.NullBinder;
 
 import java.util.HashMap;
 
@@ -9,8 +10,9 @@ import java.util.HashMap;
  * Created by CimZzz on 17/2/28.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.6 将无法找到绑定类而抛出的异常替换为返回空实现<br>
  * Description:<br>
- * Description
+ * 绑定类查找器
  */
 public final class FindUtils {
     private static final HashMap<Class,AnnotationBinder> binderMap;
@@ -31,7 +33,7 @@ public final class FindUtils {
 
                 binder = (AnnotationBinder) findCls.newInstance();
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException("未能找到合适的 AnnotationBinder , 查找类为 " + objCls.getName(),e);
+                return new NullBinder<>();
             } catch (InstantiationException e) {
                 throw new RuntimeException("AnnotationBinder 初始化错误, 查找类为 " + objCls.getName(),e);
             } catch (IllegalAccessException e) {
