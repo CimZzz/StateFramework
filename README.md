@@ -6,12 +6,12 @@ StateFramework 以 "状态观察者" 事件为核心的高内聚、低耦合开�
 * 注解只存在于编译期，不存在因为注解而造成的性能问题
 
 ## 当前版本
-0.1.3
+0.1.5
 ## 下载方法
 ### 使用前请确认 buildscript 下 gradle 版本要大于 2.2.0
 ```
-compile 'com.virtualightning.library:stateframework:0.1.3'
-annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.3'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
+compile 'com.virtualightning.library:stateframework:0.1.5'
+annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.5'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
 ```
 ## 核心功能 : 状态观察者
 ### 状态观察者简介
@@ -147,7 +147,7 @@ public class DemoActivity extends Activity {
 }
 ```
 ### 绑定事件
-以点击事件为例，更多事件请参考[注解类型集合](https://github.com/CimZzz/StateFramework/tree/master/stateframework-anno/src/main/java/com/virtualightning/stateframework/anno)
+以点击事件为例，更多事件请参考[注解类型集合](https://github.com/CimZzz/StateFramework/tree/master/stateframework-anno/src/main/java/com/virtualightning/stateframework/anno/event)
 ```
 public class DemoActivity extends Activity {
 
@@ -168,8 +168,11 @@ public class DemoActivity extends Activity {
 * 数据库相关
 
 ## AndroidStudio 插件
-[布局快速注入工具](https://github.com/CimZzz/StateFramework/blob/master/QuickInjection-Plugin.jar)
+[布局快速注入工具安装指南](https://github.com/CimZzz/StateFramework/blob/master/PLUGIN.md)
 
 ## 联系方式
+绑定资源 和 事件绑定并不全面，目前只涉及到我项目用的到的，如果需要扩展更多自动注解绑定请联系我
+
 QQ邮箱 : 1152564696@qq.com
+
 QQ : 1152564696
