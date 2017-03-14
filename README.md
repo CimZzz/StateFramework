@@ -6,12 +6,12 @@ StateFramework 以 "状态观察者" 事件为核心的高内聚、低耦合开�
 * 注解只存在于编译期，不存在因为注解而造成的性能问题
 
 ## 当前版本
-0.1.5
+0.1.6
 ## 下载方法
 ### 使用前请确认 buildscript 下 gradle 版本要大于 2.2.0
 ```
-compile 'com.virtualightning.library:stateframework:0.1.5'
-annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.5'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
+compile 'com.virtualightning.library:stateframework:0.1.6'
+annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.1.6'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
 ```
 ## 核心功能 : 状态观察者
 ### 状态观察者简介
