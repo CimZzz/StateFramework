@@ -24,13 +24,12 @@ public final class MultiFile extends Request.FormData {
         this.fileName = fileName;
         this.contentType = contentType;
         this.file = file;
+        if(file == null)
+            isEmpty = true;
     }
 
     @Override
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
-
-        if(file == null)
-            return;
 
         String buffer = "Content-Disposition: form-data; name=\"" +
                 URLEncoder.encode(key,requestBody.charset.Value) +

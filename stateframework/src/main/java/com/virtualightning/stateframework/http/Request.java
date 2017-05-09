@@ -19,6 +19,7 @@ import java.util.Random;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.1.7 添加URL参数的若干方法<br>
+ * Modify : StateFrameWork_0.1.9 修正FormData值为空的问题<br>
  * Description:<br>
  * HTTP请求
  */
@@ -92,7 +93,7 @@ public final class Request {
                 if(isMultipart) {
                     Random random = new Random();
                     StringBuilder boundaryBuilder = new StringBuilder();
-                    boundaryBuilder.append("-----BoundaryByStateFramework");
+                    boundaryBuilder.append("----BoundaryByStateFramework");
                     for(int i = 0 ; i < 10;i++)
                         boundaryBuilder.append(BOUNDARY_MAP[random.nextInt(BOUNDARY_MAP.length)]);
                     boundary = boundaryBuilder.toString();
@@ -171,11 +172,14 @@ public final class Request {
         }
 
         public Builder header(String key,String value) {
-            requestBody.requestHeader.put(key, value);
+            if(value != null)
+                requestBody.requestHeader.put(key, value);
             return this;
         }
 
         public Builder addFormData(FormData formData) {
+            if (formData.isEmpty)
+                return this;
             if(formData instanceof MultiFile)
                 requestBody.isMultipart = true;
             formData.requestBody = requestBody;
@@ -191,9 +195,11 @@ public final class Request {
     static abstract class FormData {
         final String key;
         Request requestBody;
+        boolean isEmpty;
 
         FormData(String key) {
             this.key = key;
+            this.isEmpty = false;
         }
 
         abstract void writeToStream(DataOutputStream dataOutputStream) throws Exception;

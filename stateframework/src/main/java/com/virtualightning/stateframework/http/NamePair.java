@@ -17,14 +17,13 @@ public final class NamePair extends Request.FormData {
 
     public NamePair(String key, Object value) {
         super(key);
-        this.value = value != null ? String.valueOf(value) : null;
+        this.value = String.valueOf(value);
+        if(value == null)
+            isEmpty = true;
     }
 
     @Override
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
-        if(value == null)
-            return;
-
         if(requestBody.isMultipart) {
             dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"");
             dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset.Value));
