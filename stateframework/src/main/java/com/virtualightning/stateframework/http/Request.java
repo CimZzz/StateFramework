@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -17,8 +18,9 @@ import java.util.Random;
  * Created by CimZzz on 3/4/17.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.7 添加URL参数的若干方法<br>
  * Description:<br>
- * Description
+ * HTTP请求
  */
 @SuppressWarnings("unused")
 public final class Request {
@@ -33,16 +35,40 @@ public final class Request {
     Charset charset;
     boolean isMultipart;
     HashMap<String,String> requestHeader;
+    HashMap<String,String> urlParams;
     HashMap<String,FormData> formData;
 
     Request() {
         requestHeader = new HashMap<>();
+        urlParams = new HashMap<>();
         formData = new HashMap<>();
     }
 
     HttpURLConnection commitRequest() throws Exception {
         HttpURLConnection connection;
         try {
+            /*判断是否有URLParams*/
+
+            if(urlParams.size() != 0) {
+                boolean isFirst = true;
+                if(!url.contains("/?"))
+                    url += "/?";
+                else isFirst = false;
+
+                StringBuilder sb = new StringBuilder(url);
+                for(Map.Entry<String,String> entry : urlParams.entrySet()) {
+                    if(isFirst)
+                        isFirst = false;
+                    else sb.append("&");
+                    sb.append(URLEncoder.encode(entry.getKey(),charset.Value));
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(entry.getValue(),charset.Value));
+
+                }
+
+                url = sb.toString();
+                urlParams.clear();
+            }
             /*开启URL连接*/
             connection = (HttpURLConnection) new URL(url).openConnection();
 
@@ -123,6 +149,14 @@ public final class Request {
 
         public Builder url(String url) {
             requestBody.url = url;
+            return this;
+        }
+
+        public Builder urlParams(String key,Object value) {
+            if(value != null)
+                requestBody.urlParams.put(key,String.valueOf(value));
+
+
             return this;
         }
 

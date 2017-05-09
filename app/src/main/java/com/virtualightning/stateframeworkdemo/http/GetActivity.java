@@ -39,7 +39,10 @@ public class GetActivity extends Activity {
     @OnClick(R.id.http1_btn)
     void onSendRequestClick() {
         //发送HTTP请求，这种写法有可能会导致内存泄露，仅供测试使用
-        httpClient.enqueue(new Request1(), new IHTTPCallback() {
+        Request1 request1 = new Request1();
+        request1.host = "http://localhost";
+        request1.uid = 2;
+        httpClient.enqueue(request1, new IHTTPCallback() {
             @Override
             public void onSuccess(Response response) throws IOException {
                 Log.i("HTTP",response.getResponseBodyString());

@@ -9,8 +9,10 @@ import java.lang.annotation.Target;
  * Created by CimZzz on 3/4/17.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.7 允许此注解修饰GET方法<br>
  * Description:<br>
- * POST数据键值对,会自动调用其toString()方法
+ * POST数据键值对,会自动调用其toString()方法<br>
+ * GET方法使用时会自动添加至url尾部
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.FIELD)

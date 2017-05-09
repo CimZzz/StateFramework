@@ -5,7 +5,7 @@ package com.virtualightning.stateframework.http;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- * Description
+ * 请求转换接口
  */
 public interface RequestTransform<T> {
     Request transferData(T rawData);

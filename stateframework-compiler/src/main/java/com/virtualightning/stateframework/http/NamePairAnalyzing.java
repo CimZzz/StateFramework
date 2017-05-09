@@ -20,8 +20,9 @@ import javax.lang.model.element.TypeElement;
  * Created by CimZzz on ${Date}.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.7 允许修饰GET方法<br>
  * Description:<br>
- * Description
+ * 键值对解析进程元
  */
 public class NamePairAnalyzing extends AnalyzingElem<String> {
 
@@ -52,10 +53,6 @@ public class NamePairAnalyzing extends AnalyzingElem<String> {
             return false;
         }
 
-        if(enclosingClass.getResource("Method").equals(RequestMethod.GET)) {
-            error("@VLNamePair 绑定属性所在类绑定HTTP请求的请求方式不能为GET ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
-            return false;
-        }
 
         VLNamePair vlNamePair = element.getAnnotation(VLNamePair.class);
 
@@ -81,11 +78,15 @@ public class NamePairAnalyzing extends AnalyzingElem<String> {
 
 
 
-        ClassName namePairCls = ClassName.get("com.virtualightning.stateframework.http","NamePair");
 
-        for(Map.Entry<Object,String> entry : uniqueHashMap.entrySet())
-            builder.addStatement("requestBuilder.addFormData(new $T($S,rawData.$L))",namePairCls,entry.getKey(),entry.getValue());
-
+        if(enclosingClass.getResource("Method").equals(RequestMethod.GET)) {
+            for (Map.Entry<Object, String> entry : uniqueHashMap.entrySet())
+                builder.addStatement("requestBuilder.urlParams($S,rawData.$L)", entry.getKey(), entry.getValue());
+        } else {
+            ClassName namePairCls = ClassName.get("com.virtualightning.stateframework.http","NamePair");
+            for (Map.Entry<Object, String> entry : uniqueHashMap.entrySet())
+                builder.addStatement("requestBuilder.addFormData(new $T($S,rawData.$L))", namePairCls, entry.getKey(), entry.getValue());
+        }
         return builder;
     }
 }

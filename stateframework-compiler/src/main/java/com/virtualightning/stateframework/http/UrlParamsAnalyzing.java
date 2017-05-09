@@ -21,10 +21,11 @@ import javax.lang.model.element.VariableElement;
  * Created by CimZzz on ${Date}.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.7 添加URLParamsElem作为解析元，拓展了URLParams注解的属性<br>
  * Description:<br>
- * Description
+ * URL参数解析进程元
  */
-public class UrlParamsAnalyzing extends AnalyzingElem<String> {
+public class UrlParamsAnalyzing extends AnalyzingElem<UrlParamsAnalyzing.UrlParamsElem> {
 
     public UrlParamsAnalyzing() {
         modifyValidHelper.addBanContain(Modifier.FINAL)
@@ -65,8 +66,12 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
         }
 
         VLUrlParams vlUrlParams = element.getAnnotation(VLUrlParams.class);
+        UrlParamsElem elem = new UrlParamsElem();
+        elem.elementName = element.getSimpleName().toString();
+        elem.index = vlUrlParams.value();
+        elem.isEncode = vlUrlParams.encoding();
 
-        if(!sourceManager.putSource(enclosingClass.className,vlUrlParams.value(),element.getSimpleName().toString())) {
+        if(!sourceManager.putSource(enclosingClass.className,vlUrlParams.value(),elem)) {
             error("@VLUrlParams 绑定属性填充位置不可重复 index:" + vlUrlParams.value() + " ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
@@ -81,7 +86,7 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
 
     @Override
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
-        UniqueHashMap<Object,String> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
+        UniqueHashMap<Object,UrlParamsElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
         String url = (String) enclosingClass.getResource("URL");
 
@@ -109,11 +114,13 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
                 continue;
             }else if (c == '}' && tokenFlag == 2) {
                 tokenFlag = 3;
-                String params = uniqueHashMap.get(urlParamsIndex++);
+                UrlParamsElem params = uniqueHashMap.get(urlParamsIndex++);
                 if(params != null) {
                     tokenFlag = 0;
                     String paramsIndex = "params" + (urlParamsIndex - 1);
-                    builder.addStatement("$T "+ paramsIndex + "=$T.encodeContent(rawData." + params + ",$T.$L)",String.class,URLEncodeUtilsCls,charset.getClass(),charset);
+                    if(params.isEncode)
+                        builder.addStatement("$T "+ paramsIndex + "=$T.encodeContent(rawData." + params.elementName + ",$T.$L)",String.class,URLEncodeUtilsCls,charset.getClass(),charset);
+                    else builder.addStatement("$T " + paramsIndex + "= rawData." + params.elementName,String.class);
                     urlBuilder.append("\"+").append(paramsIndex).append("+\"");
                     continue;
                 }
@@ -156,5 +163,12 @@ public class UrlParamsAnalyzing extends AnalyzingElem<String> {
         builder.addStatement("requestBuilder.url($L)",urlBuilder.toString());
 
         return builder;
+    }
+
+
+    static class UrlParamsElem {
+        String elementName;
+        int index;
+        boolean isEncode;
     }
 }

@@ -1,8 +1,9 @@
 package com.virtualightning.stateframeworkdemo.request;
 
 import com.virtualightning.stateframework.anno.http.BindHTTPRequest;
+import com.virtualightning.stateframework.anno.http.VLNamePair;
+import com.virtualightning.stateframework.anno.http.VLUrlParams;
 import com.virtualightning.stateframework.constant.RequestMethod;
-import com.virtualightning.stateframeworkdemo.http.HTTP;
 
 
 /**
@@ -13,8 +14,12 @@ import com.virtualightning.stateframeworkdemo.http.HTTP;
  * Description
  */
 @BindHTTPRequest(
-        url = HTTP.HTTP1,
+        url = "{$}/HelloWorld",
         method = RequestMethod.GET
 )
 public class Request1 {
+    @VLUrlParams(0)
+    public String host;
+    @VLNamePair("uid")
+    public Integer uid;
 }

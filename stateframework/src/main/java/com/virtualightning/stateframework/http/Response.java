@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Description:<br>
- *
+ * HTTP响应
  */
 @SuppressWarnings("unused")
 public class Response {

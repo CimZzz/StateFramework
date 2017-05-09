@@ -12,6 +12,7 @@ import com.virtualightning.stateframework.state.StateRecord;
  * Created by CimZzz on 17/3/1.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.5<br>
+ * Modify : StateFrameWork_0.1.5<br>
  * Description:<br>
  * 注解解析类
  */

@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
  * Created by CimZzz on 17/3/1.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.7 允许此注解自主选择是否进行URL编码<br>
  * Description:<br>
  * URL路径参数,只适用于注解的方式生成RequestBody,示例如下:<br>
  * http://localhost/?ss={$}&amp;s2={$}<br>
@@ -22,4 +23,9 @@ public @interface VLUrlParams {
      * @return URL路径参数下标
      */
     int value();
+
+    /**
+     * @return 是否进行URL编码
+     */
+    boolean encoding() default false;
 }

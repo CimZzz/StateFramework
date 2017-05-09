@@ -9,6 +9,7 @@ import java.net.URLEncoder;
  * Created by CimZzz on 3/4/17.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.1.8 允许当文件为 null 时此属性作废<br>
  * Description:<br>
  * Description
  */
@@ -23,13 +24,13 @@ public final class MultiFile extends Request.FormData {
         this.fileName = fileName;
         this.contentType = contentType;
         this.file = file;
-
-        if(file == null)
-            throw new RuntimeException("MultipartFile文件不能为空,文件名:" + fileName);
     }
 
     @Override
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
+
+        if(file == null)
+            return;
 
         String buffer = "Content-Disposition: form-data; name=\"" +
                 URLEncoder.encode(key,requestBody.charset.Value) +

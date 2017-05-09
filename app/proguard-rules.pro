@@ -15,3 +15,15 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep public class * implements com.virtualightning.stateframework.state.AnnotationBinder
+-keep public class * implements com.virtualightning.stateframework.http.RequestTransform
+
+-keep class com.virtualightning.stateframework.*
+-keepattributes *Annotation*
+-keep class com.virtualightning.stateframework.anno.http.*
+-keep @com.virtualightning.stateframework.anno.http.BindHTTPRequest class *
+-keepclassmembers class * { @com.virtualightning.stateframework.anno.http.BindHTTPRequest *; }
+-keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.state.* <methods>; }
+-keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.event.* <methods>; }
+-keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.bind.* <fields>; }
+-keepclasseswithmembernames class * { @com.virtualightning.stateframework.anno.http.* <fields>; }
