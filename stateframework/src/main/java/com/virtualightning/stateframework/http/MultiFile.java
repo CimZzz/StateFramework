@@ -10,6 +10,7 @@ import java.net.URLEncoder;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.1.8 允许当文件为 null 时此属性作废<br>
+ * Modify : StateFrameWork_0.2.1 修复使用multipart时数据格式错误<br>
  * Description:<br>
  * Description
  */
@@ -31,15 +32,21 @@ public final class MultiFile extends Request.FormData {
     @Override
     void writeToStream(DataOutputStream dataOutputStream) throws Exception {
 
-        String buffer = "Content-Disposition: form-data; name=\"" +
-                URLEncoder.encode(key,requestBody.charset.Value) +
-                "\"; filename=\"" +
-                URLEncoder.encode(fileName,requestBody.charset.Value) +
-                "\"\n" +
-                "Content-Type: " +
-                contentType +
-                "\n\r\n";
-        dataOutputStream.writeBytes(buffer);
+//        String buffer = "Content-Disposition: form-data; name=\"" +
+//                URLEncoder.encode(key,requestBody.charset.Value) +
+//                "\"; filename=\"" +
+//                URLEncoder.encode(fileName,requestBody.charset.Value) +
+//                "\"\r\n" +
+//                "Content-Type: " +
+//                contentType +
+//                "\r\n\r\n";
+        dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"");
+        dataOutputStream.writeBytes(URLEncoder.encode(key,requestBody.charset.Value));
+        dataOutputStream.writeBytes("\"; filename=\"");
+        dataOutputStream.writeBytes(URLEncoder.encode(fileName,requestBody.charset.Value));
+        dataOutputStream.writeBytes("\"\r\nContent-Type: ");
+        dataOutputStream.writeBytes(contentType);
+        dataOutputStream.writeBytes("\r\n\r\n");
 
         FileInputStream fileInputStream = null;
         try{
