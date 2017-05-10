@@ -20,6 +20,7 @@ import javax.lang.model.element.VariableElement;
  * Created by CimZzz on ${Date}.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.2.3 增加Multipart方式<br>
  * Description:<br>
  * Description
  */
@@ -91,6 +92,8 @@ public class MultiFileAnalyzing extends AnalyzingElem<MultiFileAnalyzing.MultiFi
             return builder;
 
         ClassName multiFileCls = ClassName.get("com.virtualightning.stateframework.http","MultiFile");
+
+        builder.addStatement("requestBuilder.multipart()");
 
         for(MultiFileElem multiFileElem : uniqueHashMap.values()) {
             builder.addStatement("requestBuilder.addFormData(new $T($S,$S,$S,rawData.$L))",multiFileCls,

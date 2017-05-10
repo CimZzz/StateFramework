@@ -20,6 +20,8 @@ import java.util.Random;
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.1.7 添加URL参数的若干方法<br>
  * Modify : StateFrameWork_0.1.9 修正FormData值为空的问题<br>
+ * Modify : StateFrameWork_0.2.2 修复使用multipart时数据格式错误<br>
+ * Modify : StateFrameWork_0.2.3 增加Multipart方式<br>
  * Description:<br>
  * HTTP请求
  */
@@ -110,7 +112,7 @@ public final class Request {
                     boundary = "--" + boundary;
                     for (FormData formData : this.formData.values()) {
                         dataOutputStream.writeBytes(boundary);
-                        dataOutputStream.writeBytes("\n");
+                        dataOutputStream.writeBytes("\r\n");
                         formData.writeToStream(dataOutputStream);
                     }
                     dataOutputStream.writeBytes(boundary);
@@ -174,6 +176,11 @@ public final class Request {
         public Builder header(String key,String value) {
             if(value != null)
                 requestBody.requestHeader.put(key, value);
+            return this;
+        }
+
+        public Builder multipart() {
+            requestBody.isMultipart = true;
             return this;
         }
 
