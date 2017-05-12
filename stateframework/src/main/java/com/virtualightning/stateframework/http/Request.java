@@ -22,6 +22,7 @@ import java.util.Random;
  * Modify : StateFrameWork_0.1.9 修正FormData值为空的问题<br>
  * Modify : StateFrameWork_0.2.2 修复使用multipart时数据格式错误<br>
  * Modify : StateFrameWork_0.2.3 增加Multipart方式<br>
+ * Modify : StateFrameWork_0.2.4 增加连接超时设置<br>
  * Description:<br>
  * HTTP请求
  */
@@ -36,6 +37,10 @@ public final class Request {
     String url;
     RequestMethod method;
     Charset charset;
+
+    Integer connectTimeOut;
+    Integer readTimeOut;
+
     boolean isMultipart;
     HashMap<String,String> requestHeader;
     HashMap<String,String> urlParams;
@@ -46,6 +51,7 @@ public final class Request {
         urlParams = new HashMap<>();
         formData = new HashMap<>();
     }
+
 
     HttpURLConnection commitRequest() throws Exception {
         HttpURLConnection connection;
@@ -74,6 +80,14 @@ public final class Request {
             }
             /*开启URL连接*/
             connection = (HttpURLConnection) new URL(url).openConnection();
+
+            /*设置连接超时时间*/
+            if(connectTimeOut != null)
+                connection.setConnectTimeout(connectTimeOut);
+
+            /*设置读取超时时间*/
+            if(readTimeOut != null)
+                connection.setConnectTimeout(readTimeOut);
 
             /*设置HTTP连接前的一些请求参数*/
             connection.setRequestMethod(method.Value);
