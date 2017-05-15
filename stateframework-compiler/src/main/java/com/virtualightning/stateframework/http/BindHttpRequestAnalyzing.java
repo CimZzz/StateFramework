@@ -19,6 +19,7 @@ import javax.lang.model.element.TypeElement;
  * Created by CimZzz on ${Date}.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.2.5 添加URL编码选项<br>
  * Description:<br>
  * Description
  */
@@ -51,6 +52,7 @@ public class BindHTTPRequestAnalyzing extends AnalyzingElem<Object> {
         enclosingClass.putResource("URL",bindHTTPRequest.url());
         enclosingClass.putResource("Method",bindHTTPRequest.method());
         enclosingClass.putResource("Charset",bindHTTPRequest.charset());
+        enclosingClass.putResource("URLEncode",bindHTTPRequest.urlEncode());
 
         return true;
     }
@@ -62,6 +64,7 @@ public class BindHTTPRequestAnalyzing extends AnalyzingElem<Object> {
 
         RequestMethod method = (RequestMethod) enclosingClass.getResource("Method");
         Charset charset = (Charset) enclosingClass.getResource("Charset");
+        boolean urlEncode = (boolean) enclosingClass.getResource("URLEncode");
 
 
         MethodSpec.Builder transferMethodBuilder = MethodSpec
@@ -74,6 +77,7 @@ public class BindHTTPRequestAnalyzing extends AnalyzingElem<Object> {
 
         transferMethodBuilder.addStatement("requestBuilder.method($T.$L)",method.getClass(),method);
         transferMethodBuilder.addStatement("requestBuilder.charset($T.$L)",charset.getClass(),charset);
+        transferMethodBuilder.addStatement("requestBuilder.urlEncode($L)",urlEncode);
 
         return transferMethodBuilder;
     }

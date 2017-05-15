@@ -15,7 +15,7 @@ import com.virtualightning.stateframework.constant.RequestMethod;
  */
 @BindHTTPRequest(
         url = "{$}/HelloWorld",
-        method = RequestMethod.GET
+        method = RequestMethod.POST
 )
 public class Request1 {
     @VLUrlParams(0)

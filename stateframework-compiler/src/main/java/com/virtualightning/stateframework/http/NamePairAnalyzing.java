@@ -24,7 +24,7 @@ import javax.lang.model.element.TypeElement;
  * Description:<br>
  * 键值对解析进程元
  */
-public class NamePairAnalyzing extends AnalyzingElem<String> {
+public class NamePairAnalyzing extends AnalyzingElem<NamePairAnalyzing.NamePairElem> {
 
     public NamePairAnalyzing() {
         modifyValidHelper.addBanContain(Modifier.FINAL)
@@ -55,8 +55,10 @@ public class NamePairAnalyzing extends AnalyzingElem<String> {
 
 
         VLNamePair vlNamePair = element.getAnnotation(VLNamePair.class);
+        NamePairElem elem = new NamePairElem();
+        elem.elementName = element.getSimpleName().toString();
 
-        if(!sourceManager.putSource(enclosingClass.className,vlNamePair.value(),element.getSimpleName().toString())) {
+        if(!sourceManager.putSource(enclosingClass.className,vlNamePair.value(),elem)) {
             error("@VLNamePair 绑定参数的name必须唯一 ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
@@ -71,7 +73,7 @@ public class NamePairAnalyzing extends AnalyzingElem<String> {
 
     @Override
     public MethodSpec.Builder generateMethod(MethodSpec.Builder builder, EnclosingClass enclosingClass) {
-        UniqueHashMap<Object,String> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
+        UniqueHashMap<Object,NamePairElem> uniqueHashMap = sourceManager.getUniqueHashMap(enclosingClass.className);
 
         if(uniqueHashMap == null || uniqueHashMap.size() == 0)
             return builder;
@@ -80,13 +82,19 @@ public class NamePairAnalyzing extends AnalyzingElem<String> {
 
 
         if(enclosingClass.getResource("Method").equals(RequestMethod.GET)) {
-            for (Map.Entry<Object, String> entry : uniqueHashMap.entrySet())
-                builder.addStatement("requestBuilder.urlParams($S,rawData.$L)", entry.getKey(), entry.getValue());
+            for (Map.Entry<Object, NamePairElem> entry : uniqueHashMap.entrySet())
+                builder.addStatement("requestBuilder.urlParams($S,rawData.$L)", entry.getKey(), entry.getValue().elementName);
         } else {
             ClassName namePairCls = ClassName.get("com.virtualightning.stateframework.http","NamePair");
-            for (Map.Entry<Object, String> entry : uniqueHashMap.entrySet())
-                builder.addStatement("requestBuilder.addFormData(new $T($S,rawData.$L))", namePairCls, entry.getKey(), entry.getValue());
+            for (Map.Entry<Object, NamePairElem> entry : uniqueHashMap.entrySet())
+                builder.addStatement("requestBuilder.addFormData(new $T($S,rawData.$L))", namePairCls, entry.getKey()
+                        , entry.getValue().elementName);
         }
         return builder;
+    }
+
+
+    static class NamePairElem {
+        String elementName;
     }
 }

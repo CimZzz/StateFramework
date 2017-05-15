@@ -8,7 +8,6 @@ import com.virtualightning.stateframework.EnclosingSet;
 import com.virtualightning.stateframework.UniqueHashMap;
 import com.virtualightning.stateframework.anno.http.VLUrlParams;
 import com.virtualightning.stateframework.constant.Charset;
-import com.virtualightning.stateframework.constant.RequestMethod;
 
 import java.lang.annotation.Annotation;
 
@@ -22,6 +21,7 @@ import javax.lang.model.element.VariableElement;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.1.7 添加URLParamsElem作为解析元，拓展了URLParams注解的属性<br>
+ * Modify : StateFrameWork_0.2.5 允许POST方法使用此注解<br>
  * Description:<br>
  * URL参数解析进程元
  */
@@ -58,10 +58,6 @@ public class UrlParamsAnalyzing extends AnalyzingElem<UrlParamsAnalyzing.UrlPara
         /*绑定的属性类型必须为 String,且 HTTP 请求的方法必须为 GET*/
         if(!variableElement.asType().toString().equals("java.lang.String")) {
             error("@VLUrlParams 绑定属性类型必须为 String ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
-            return false;
-        }
-        if(!enclosingClass.getResource("Method").equals(RequestMethod.GET)) {
-            error("@VLUrlParams 绑定属性所在类绑定HTTP请求的请求方式必须为GET ,定位于 " + typeElement.getSimpleName() + " 的 " + element.getSimpleName() + " 属性");
             return false;
         }
 

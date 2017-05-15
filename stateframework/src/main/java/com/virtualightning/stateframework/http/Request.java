@@ -23,6 +23,7 @@ import java.util.Random;
  * Modify : StateFrameWork_0.2.2 修复使用multipart时数据格式错误<br>
  * Modify : StateFrameWork_0.2.3 增加Multipart方式<br>
  * Modify : StateFrameWork_0.2.4 增加连接超时设置<br>
+ * Modify : StateFrameWork_0.2.5 添加URL编码选项<br>
  * Description:<br>
  * HTTP请求
  */
@@ -33,6 +34,8 @@ public final class Request {
             ,'T','U','V','W','X','Y','Z','a','b','c','d','e','f'
             ,'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
             ,'1','2','3','4','5','6','7','8','9'};
+
+    boolean needEncode;
 
     String url;
     RequestMethod method;
@@ -166,6 +169,12 @@ public final class Request {
 
         public Builder url(String url) {
             requestBody.url = url;
+            return this;
+        }
+
+        public Builder urlEncode(boolean needEncode) {
+            requestBody.needEncode = needEncode;
+
             return this;
         }
 

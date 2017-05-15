@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * Created by CimZzz on 17/3/1.<br>
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
+ * Modify : StateFrameWork_0.2.5 添加URL编码选项<br>
  * Description:<br>
  * 绑定HTTP请求注解<br>
  */
@@ -34,4 +35,9 @@ public @interface BindHTTPRequest {
      * @return HTTP 请求编码
      */
     Charset charset() default Charset.UTF_8;
+
+    /**
+     * @return 是否需要URLEncode
+     */
+    boolean urlEncode() default true;
 }
