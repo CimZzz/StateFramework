@@ -10,6 +10,7 @@ import java.net.URLEncoder;
  * Modify : StateFrameWork_0.1.7 允许属性类型为Object。当值为 null 时此属性作废<br>
  * Modify : StateFrameWork_0.2.1 修复使用multipart时数据格式错误<br>
  * Modify : StateFrameWork_0.2.5 添加URL编码选项<br>
+ * Modify : StateFrameWork_0.2.6 修复传两次值的错误<br>
  * Description:<br>
  * HTTP键值对
  */
@@ -40,7 +41,6 @@ public final class NamePair extends Request.FormData {
             if(requestBody.needEncode)
                 dataOutputStream.writeBytes(URLEncoder.encode(value,requestBody.charset.Value));
             else dataOutputStream.write(value.getBytes(requestBody.charset.Value));
-            dataOutputStream.write(value.getBytes(requestBody.charset.Value));
         }
     }
 }
