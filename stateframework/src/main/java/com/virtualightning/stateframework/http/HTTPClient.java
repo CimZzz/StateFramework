@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.2.4 增加连接超时设置<br>
+ * Modify : StateFrameWork_0.2.8 onFailure函数现在会处理全部异常<br>
  * Description:<br>
  * Description
  */
@@ -61,8 +62,6 @@ public final class HTTPClient {
 
             callback.onSuccess(response);
         } catch (Exception e) {
-            if(e instanceof RuntimeException)
-                throw (RuntimeException)e;
             callback.onFailure(e);
         } finally {
             if(connection != null)
