@@ -11,6 +11,7 @@ import java.util.HashMap;
  * Project Name : Virtual-Lightning StateFrameWork<br>
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.1.6 将无法找到绑定类而抛出的异常替换为返回空实现<br>
+ * Modify : StateFrameWork_0.3.0 修复了内部类寻址问题<br>
  * Description:<br>
  * 绑定类查找器
  */
@@ -29,7 +30,11 @@ public final class FindUtils {
 
         if(binder == null) {
             try {
-                Class findCls = Class.forName(objCls.getName() + "$$$AnnotationBinder");
+                String className;
+                if(objCls.isMemberClass())
+                    className = objCls.getPackage().getName() + objCls.getSimpleName() + "$$$AnnotationBinder";
+                else className = objCls.getName() + "$$$AnnotationBinder";
+                Class findCls = Class.forName(className);
 
                 binder = (AnnotationBinder) findCls.newInstance();
             } catch (ClassNotFoundException e) {
@@ -51,7 +56,11 @@ public final class FindUtils {
 
         if(transform == null) {
             try {
-                Class findCls = Class.forName(objCls.getName() + "$$$RequestTransform");
+                String className;
+                if(objCls.isMemberClass())
+                    className = objCls.getPackage().getName() + objCls.getSimpleName() + "$$$RequestTransform";
+                else className = objCls.getName() + "$$$RequestTransform";
+                Class findCls = Class.forName(className);
 
                 transform = (RequestTransform) findCls.newInstance();
             } catch (ClassNotFoundException e) {

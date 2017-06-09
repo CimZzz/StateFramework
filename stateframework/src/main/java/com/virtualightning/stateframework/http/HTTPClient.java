@@ -2,7 +2,6 @@ package com.virtualightning.stateframework.http;
 
 import com.virtualightning.stateframework.utils.FindUtils;
 
-import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,6 +11,7 @@ import java.util.concurrent.Executors;
  * Since : StateFrameWork_0.0.1<br>
  * Modify : StateFrameWork_0.2.4 增加连接超时设置<br>
  * Modify : StateFrameWork_0.2.8 onFailure函数现在会处理全部异常<br>
+ * Modify : StateFrameWork_0.2.9 增加Execute类作为HTTP执行类<br>
  * Description:<br>
  * Description
  */
@@ -51,42 +51,15 @@ public final class HTTPClient {
         }
     }
 
-    public void execute(Request request,IHTTPCallback callback) {
-        HttpURLConnection connection = null;
-        try {
-            request.connectTimeOut = connectTimeOut;
-            request.readTimeOut = readTimeOut;
-            connection = request.commitRequest();
-
-            Response response = new Response(connection);
-
-            callback.onSuccess(response);
-        } catch (Exception e) {
-            callback.onFailure(e);
-        } finally {
-            if(connection != null)
-                connection.disconnect();
-
-        }
+    public Execute genExecute(Request request, IHTTPCallback callback) {
+        request.connectTimeOut = connectTimeOut;
+        request.readTimeOut = readTimeOut;
+        return new Execute(request, callback, threadPool);
     }
 
-    public void enqueue(final Request request,final IHTTPCallback callback) {
-        threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                execute(request, callback);
-            }
-        });
-    }
-
-    public void execute(Object object,IHTTPCallback callback) {
+    public Execute genExecute(Object object, IHTTPCallback callback) {
         final Request request = FindUtils.findTransferClassByObject(object).transferData(object);
-        execute(request,callback);
-    }
-
-    public void enqueue(Object object, final IHTTPCallback callback) {
-        final Request request = FindUtils.findTransferClassByObject(object).transferData(object);
-        enqueue(request,callback);
+        return genExecute(request,callback);
     }
 
     public void close() {

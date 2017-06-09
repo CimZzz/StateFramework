@@ -42,7 +42,7 @@ public class GetActivity extends Activity {
         Request1 request1 = new Request1();
         request1.host = "http://localhost";
         request1.uid = 2;
-        httpClient.enqueue(request1, new IHTTPCallback() {
+        httpClient.genExecute(request1, new IHTTPCallback() {
             @Override
             public void onSuccess(Response response) throws IOException {
                 Log.i("HTTP",response.getResponseBodyString());
@@ -52,7 +52,7 @@ public class GetActivity extends Activity {
             public void onFailure(Exception e) {
                 Log.i("HTTP",e.getMessage());
             }
-        });
+        }).enqueue();
     }
 
 

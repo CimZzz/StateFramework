@@ -32,6 +32,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile project(':stateframework')
     annotationProcessor project(':stateframework-compiler')
-    compile files('libs/cc.jar')
-    compile files('libs/classes-dex2jar.jar')
 }

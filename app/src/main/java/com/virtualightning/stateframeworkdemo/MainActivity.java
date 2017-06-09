@@ -55,4 +55,9 @@ public class MainActivity extends Activity {
                 break;
         }
     }
+
+    static class Demo {
+        @BindResources(resId = R.array.mainItem,type = ResType.STRING_ARRAY)
+        String[] strArray;
+    }
 }

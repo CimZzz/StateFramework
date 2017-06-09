@@ -12,7 +12,7 @@ import android.os.Message;
  * 主线程调用
  */
 @SuppressWarnings("unused")
-public final class MainLoopCall{
+public final class MainLoopCall {
     public static final int MSG_STATE_UPDATE = 1001;
 
     private static MainLoopCall call;
