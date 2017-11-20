@@ -10,7 +10,7 @@ StateFramework 以 "状态观察者" 事件为核心的高内聚、低耦合开�
 ## 下载方法
 ### 使用前请确认 buildscript 下 gradle 版本要大于 2.2.0
 ```
-compile 'com.virtualightning.library:stateframework:0.3.1'
+compile 'com.virtualightning.library:stateframework:0.3.1'//如果使用的Android Studio版本大于3.0请使用 "api" 代替 "compile"
 annotationProcessor 'com.virtualightning.library:stateframework-compiler:0.3.1'//StateFramework注解处理器，如果你不想用注解的方式绑定可注释此行
 ```
 ## 核心功能 : 状态观察者
@@ -49,7 +49,6 @@ stateRecord.registerObserver(observerBuilder);//注册内部状态观察者
 public class DemoActivity extends Activity {
 
     StateRecord stateRecord;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
